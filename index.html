@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Matrix Rain Effect</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100%;
+      background: black;
+    }
+    #matrixCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 9999;
+    }
+    #mainContent {
+      display: none;
+      position: relative;
+      z-index: 1;
+      color: white;
+      padding: 2rem;
+    }
+    
+  .sprite {
+    position: absolute;
+    width: 64px; height: 64px;
+    top: 80%;       /* same as groundY – spriteHeight */
+    left: 50%;      /* center */
+    transform: translateX(-50%);
+    display: none;  /* only one shown at a time */
+    pointer-events: none;
+    z-index: 10000; /* above the canvas */
+  }
+  .sprite.left {
+  transform: translateX(-50%) scaleX(-1);
+  }
+
+  </style>
+</head>
+<body>
+  <canvas id="matrixCanvas"></canvas>
+  <div id="mainContent">
+    <h1>Welcome to My Website</h1>
+    <p>This is the main content of your page.</p>
+  </div>
+
+  <script src="matrixRain.js"></script>
+
+  <canvas id="navCanvas" style="display:none; position:absolute; top:0; left:0; z-index:9999;"></canvas>
+<!-- four hidden <img> elements, all absolutely centered -->
+<img id="sprite-walking" src="WalkingRight.png" class="sprite" />
+<img id="sprite-standing" src="StandingRight.png" class="sprite" />
+
+
+
+<script src="nav.js"></script>
+</body>
+</html>
