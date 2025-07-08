@@ -21,6 +21,7 @@
   let facing = 'R';      // 'R' or 'L'
   let moving = false;
   let atDoor = null;
+  let worldOffset = 0;
 
   // Flash animation state
   let flash = {
