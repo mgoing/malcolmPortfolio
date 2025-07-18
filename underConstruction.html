@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Coming Soon!</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #0d0d0d;
+      color: white;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    .gif-container {
+      border: 4px solid #ffffff22;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+      background-color: #1a1a1a;
+      animation: pulse 3s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); }
+      50% { box-shadow: 0 0 40px rgba(255, 255, 255, 0.4); }
+      100% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); }
+    }
+
+    .gif-container img {
+      max-width: 300px;
+      border-radius: 12px;
+    }
+
+    .link-section {
+      margin-top: 20px;
+    }
+
+    .link-section p {
+      margin-bottom: 10px;
+      font-size: 1.2em;
+    }
+
+    .link-section a {
+      color: #00ffff;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: bold;
+      transition: color 0.3s, text-shadow 0.3s;
+    }
+
+    .link-section a:hover {
+      color: #fff;
+      text-shadow: 0 0 10px #00ffff;
+    }
+
+     h1 {
+      font-size: 2em;
+      margin-bottom: 20px;
+      color: #00ffff;
+      text-shadow: 0 0 10px #00ffff88;
+    }
+  </style>
+ 
+</head>
+<body>
+
+
+<h1>Exciting Things Are Coming!</h1>
+  <div class="gif-container">
+    <img src="construction.gif" alt="Coming Soon GIF">
+  </div>
+
+  <div class="link-section">
+    <p>Check these out in the meantime:</p>
+    <a href="https://github.com/mgoing" target="_blank">GitHub</a>
+    <a href="www.linkedin.com/in/malcolmgoing" target="_blank">Linkedin</a>
+  </div>
+
+</body>
+</html>

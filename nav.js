@@ -1,3 +1,11 @@
+//TODO add labels to the doors
+//TODO increase size of figure
+//TODO add floating orbs
+// TODO add actual link to new pages
+// TODO slow down speed of user
+//TODO add tips that slowly appear on screen after 3 seconds of no movement
+
+
 (function() {
   const canvas = document.getElementById('navCanvas');
   const ctx = canvas.getContext('2d');
@@ -11,7 +19,7 @@
   const worldWidth = 3000;
   const doorXs = [800, 1200, 1800];
   const doorW = 96, doorH = 144;
-  const doorURLs = ['/area1.html','/area2.html','/area3.html'];
+  const doorURLs = ['/underConstruction.html','/underConstruction.html','/underConstruction.html'];
 
   // --- SPRITE MANAGEMENT ---
   const spriteStanding = document.getElementById('sprite-standing');
@@ -32,6 +40,16 @@
     circleDur: 400,
     totalDur: 700
   };
+    //new
+     let lastMoveTs = performance.now();
+  const TIP_DELAY = 3000;       // ms until tip appears
+  const TIP_FADE = 1000;        // fade in/out duration
+  let tipState = 'waiting';     // 'waiting'|'fadeIn'|'show'|'fadeOut'|'done'
+
+   let mx = 0, my = 0;
+  window.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+  });
 
   // --- INPUT ---
   window.addEventListener('keydown', e => {
@@ -42,6 +60,10 @@
       flash.active = true;
       flash.doorIndex = atDoor;
       flash.t = 0;
+    }
+      if (e.code === 'KeyA' || e.code === 'KeyD') {
+      lastMoveTs = performance.now();
+      tipState = 'waiting';
     }
   });
 
@@ -67,9 +89,25 @@
     }
   }
 
+
+
   function loop(ts) {
     const dt = ts - (loop.lastTS || ts);
     loop.lastTS = ts;
+
+const since = ts - lastMoveTs;
+    if (!moving) {
+      if (since > TIP_DELAY + TIP_FADE*2 && tipState !== 'done') {
+        tipState = 'done';
+      } else if (since > TIP_DELAY + TIP_FADE && tipState === 'fadeIn') {
+        tipState = 'show';
+      } else if (since > TIP_DELAY && tipState === 'waiting') {
+        tipState = 'fadeIn';
+      } else if (since > TIP_DELAY + TIP_FADE && tipState === 'show') {
+        tipState = 'fadeOut';
+      }
+    }
+
 
     // movement
     if (!flash.active) {
@@ -79,6 +117,18 @@
 
     // clear
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+ ctx.save();
+    const glowR = 30;
+    const grad = ctx.createRadialGradient(mx, my, 0, mx, my, glowR);
+    grad.addColorStop(0, 'rgba(255,255,255,0.4)');
+    grad.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(mx, my, glowR, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+
 
     // ground
     ctx.strokeStyle = '#666';
@@ -131,6 +181,23 @@
         return;
       }
     }
+
+if (tipState !== 'waiting' && tipState !== 'done') {
+      let alpha = 1;
+      const t = since - TIP_DELAY;
+      if (tipState === 'fadeIn')      alpha = Math.min(t / TIP_FADE, 1);
+      else if (tipState === 'fadeOut') alpha = 1 - Math.min((t - (TIP_FADE+1000)) / TIP_FADE, 1);
+      else if (tipState === 'show')    alpha = 1;
+
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = '#fff';
+      ctx.font = '24px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('Please press "A" or "D" to move', canvas.width/2, canvas.height/2);
+      ctx.restore();
+    }
+
 
     updateSprite();
     requestAnimationFrame(loop);
