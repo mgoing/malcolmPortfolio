@@ -3,7 +3,8 @@
 //TODO add floating orbs
 // TODO add actual link to new pages
 // TODO slow down speed of user
-//TODO add tips that slowly appear on screen after 3 seconds of no movement
+//TODO text needs to be stylized better in a way that doesnt create lag. css keyframes and glowtext is too laggy
+
 
 
 (function() {
@@ -40,6 +41,8 @@
     circleDur: 400,
     totalDur: 700
   };
+
+
     //new
      let lastMoveTs = performance.now();
   const TIP_DELAY = 3000;       // ms until tip appears
@@ -51,19 +54,30 @@
     mx = e.clientX; my = e.clientY;
   });
 
+  let glowText = "Use 'A' & 'D' to move and 'Space Bar' to enter. Mobile support coming soon";
+  let glowAngle = 0;
+  let showGlowText = false;
+  let glowTimer = 4000; // in ms
+  let glowStartTs = null;
+  let afterTimer = true;
+
   // --- INPUT ---
   window.addEventListener('keydown', e => {
+    
     if (flash.active) return;
-    if (e.code === 'KeyA') { facing = 'L'; moving = true; }
-    if (e.code === 'KeyD') { facing = 'R'; moving = true; }
+    if (e.code === 'KeyA') { facing = 'L'; moving = true; afterTimer = false; }
+    if (e.code === 'KeyD') { facing = 'R'; moving = true; afterTimer = false;}
     if ((e.code === 'Enter' || e.code === 'Space') && atDoor !== null) {
       flash.active = true;
       flash.doorIndex = atDoor;
       flash.t = 0;
+      
     }
       if (e.code === 'KeyA' || e.code === 'KeyD') {
       lastMoveTs = performance.now();
       tipState = 'waiting';
+      showGlowText = false;
+      afterTimer = false;
     }
   });
 
@@ -89,24 +103,50 @@
     }
   }
 
+//glow function
+function displayGlowText(){
+  glowAngle += 0.03;
+let offset = Math.sin(glowAngle) *10;
+
+ctx.save();
+ctx.textAlign = "center";
+ctx.font = '25px garamond-serif';
+
+ctx.fillStyle = "rgba(213, 241, 241, 1)";
+ctx.shadowColor = "#0ff";
+ctx.shadowBlur = 100;
+
+ctx.fillText(glowText, canvas.width/2 + offset, 80); 
+
+ctx.restore();
+} 
+
+
 
 
   function loop(ts) {
     const dt = ts - (loop.lastTS || ts);
     loop.lastTS = ts;
 
-const since = ts - lastMoveTs;
-    if (!moving) {
-      if (since > TIP_DELAY + TIP_FADE*2 && tipState !== 'done') {
-        tipState = 'done';
-      } else if (since > TIP_DELAY + TIP_FADE && tipState === 'fadeIn') {
-        tipState = 'show';
-      } else if (since > TIP_DELAY && tipState === 'waiting') {
-        tipState = 'fadeIn';
-      } else if (since > TIP_DELAY + TIP_FADE && tipState === 'show') {
-        tipState = 'fadeOut';
-      }
-    }
+    const since = ts - lastMoveTs;
+        if (!moving) {
+          if (since > TIP_DELAY + TIP_FADE*2 && tipState !== 'done') {
+            tipState = 'done';
+          } else if (since > TIP_DELAY + TIP_FADE && tipState === 'fadeIn') {
+            tipState = 'show';
+          } else if (since > TIP_DELAY && tipState === 'waiting') {
+            tipState = 'fadeIn';
+          } else if (since > TIP_DELAY + TIP_FADE && tipState === 'show') {
+            tipState = 'fadeOut';
+          }
+        }
+
+        //if bool && loop - performance.now > 5000
+        if (afterTimer === true && ts - glowStartTs > 3000){
+          showGlowText = true;
+          
+          //document.getElementById("glowText").style.display = "block";
+        }
 
 
     // movement
@@ -129,6 +169,8 @@ const since = ts - lastMoveTs;
     ctx.fill();
     ctx.restore();
 
+
+    
 
     // ground
     ctx.strokeStyle = '#666';
@@ -189,24 +231,25 @@ if (tipState !== 'waiting' && tipState !== 'done') {
       else if (tipState === 'fadeOut') alpha = 1 - Math.min((t - (TIP_FADE+1000)) / TIP_FADE, 1);
       else if (tipState === 'show')    alpha = 1;
 
-      ctx.save();
-      ctx.globalAlpha = alpha;
-      ctx.fillStyle = '#fff';
-      ctx.font = '24px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('Please press "A" or "D" to move', canvas.width/2, canvas.height/2);
-      ctx.restore();
+      
     }
 
+    if (showGlowText) {
+      displayGlowText();
+    }
+    
 
     updateSprite();
     requestAnimationFrame(loop);
-  }
+    
+  } //function loop end
 
   // Entry point
   window.startNavigation = function() {
+    const navCanvas = document.getElementById('navCanvas');
     document.getElementById('matrixCanvas').style.display = 'none';
-    canvas.style.display = 'block';
+    navCanvas.style.display = 'block';
+    glowStartTs = performance.now();
     loop.lastTS = performance.now();
     requestAnimationFrame(loop);
   };

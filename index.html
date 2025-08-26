@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Matrix Rain Effect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
+
   <style>
     html, body {
       margin: 0;
@@ -39,6 +41,35 @@
   .sprite.left {
   transform: translateX(-50%) scaleX(-1);
   }
+  .glowText{
+
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font: "Courier New";
+    font-size: 25px;
+    color: #fff;
+    text-align: center;
+    display: none; 
+    z-index: 10001;
+    animation: glow 1s ease-in-out infinite alternate;
+
+
+  }
+@keyframes glow {
+    from {
+      text-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 30px #0ff, 0 0 40px #0ff,
+                    0 0 50px #0ff, 0 0 60px #0ff, 0 0 70px #0ff;
+    }
+    to {
+      text-shadow: 0 0 20px #0ff, 0 0 30px #0ff, 0 0 40px #0ff, 0 0 50px #0ff,
+                   0 0 60px #0ff, 0 0 70px #0ff, 0 0 80px #0ff;
+    }
+  }
+
+
+  
 
   </style>
 </head>
@@ -49,15 +80,16 @@
     <p>This is the main content of your page.</p>
   </div>
 
-  <script src="matrixRain.js"></script>
+  
 
   <canvas id="navCanvas" style="display:none; position:absolute; top:0; left:0; z-index:9999;"></canvas>
+  <h1 id="glowText" class="glowText">Press 'A' or 'D' to Navigate. Mobile support coming soon</h1>
 <!-- four hidden <img> elements, all absolutely centered -->
 <img id="sprite-standing" class="sprite" src="StandingRight.png" />
 <img id="sprite-walking" class="sprite" src="WalkingRight.png" />
 
 
-
+<script src="matrixRain.js"></script>
 <script src="nav.js"></script>
 </body>
 </html>

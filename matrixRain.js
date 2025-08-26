@@ -40,18 +40,30 @@ function drawMatrixRain() {
 
 let interval = setInterval(drawMatrixRain, 50);
 
-// Fade out after 5 seconds
+// Fade out after 6 seconds
 setTimeout(() => {
+  let opacity = 1;
   const fadeOut = setInterval(() => {
-    canvas.style.opacity -= 0.05;
-    if (canvas.style.opacity <= 0) {
+    opacity -= 0.05;
+    
+    if (opacity <= 0) {
+      opacity = 0;
       clearInterval(fadeOut);
-clearInterval(interval);
-canvas.style.display = "none";      // hide matrix
-document.getElementById("mainContent").style.display = "none"; // keep main hidden
-// start the navigation
-window.startNavigation();
+      clearInterval(interval);
+      canvas.style.display = "none";      // hide matrix
+
+      const mainElThing = document.getElementById("mainContent");
+      if (mainElThing) {
+        mainElThing.style.display = "none"; 
+      }
+      if (typeof window.startNavigation === "function") {
+        window.startNavigation(); // hand over to nav.js
+      }
     }
+    canvas.style.opacity = opacity;
+
+
+    
   }, 50);
 }, 7000);
 
