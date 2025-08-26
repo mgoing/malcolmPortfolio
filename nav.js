@@ -65,8 +65,8 @@
   window.addEventListener('keydown', e => {
     
     if (flash.active) return;
-    if (e.code === 'KeyA') { facing = 'L'; moving = true; afterTimer = false; }
-    if (e.code === 'KeyD') { facing = 'R'; moving = true; afterTimer = false;}
+    if (e.code === 'KeyA') { facing = 'L'; moving = true;  }
+    if (e.code === 'KeyD') { facing = 'R'; moving = true; }
     if ((e.code === 'Enter' || e.code === 'Space') && atDoor !== null) {
       flash.active = true;
       flash.doorIndex = atDoor;
@@ -145,7 +145,7 @@ ctx.restore();
         if (afterTimer === true && ts - glowStartTs > 3000){
           showGlowText = true;
           
-          //document.getElementById("glowText").style.display = "block";
+          
         }
 
 
