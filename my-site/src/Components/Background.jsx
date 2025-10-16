@@ -1,37 +1,25 @@
 // src/components/Background.jsx
 import React, { useEffect, useState } from 'react';
-import FaultyTerminal from './FaultyTerminal.jsx'; 
+import FaultyTerminal from './FaultyTerminal.jsx'; // <- your local file (FaultyTerminal.jsx)
 
 export default function Background() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    // Handler when the matrix script dispatches an event
     const showHandler = (e) => {
-      // your matrixRain currently just fires 'show-faulty-terminal' with no detail,
-      // so treat any event as "show". If you later send detail.visible, we accept that too.
-      const detailVisible = e?.detail?.visible;
-      if (typeof detailVisible === 'boolean') {
-        setVisible(Boolean(detailVisible));
-      } else {
-        setVisible(true);
-      }
+      // Accept either a boolean in detail.visible or no detail (treat as "show")
+      const dv = e?.detail?.visible;
+      setVisible(typeof dv === 'boolean' ? dv : true);
     };
-
     const hideHandler = (e) => {
-      const detailVisible = e?.detail?.visible;
-      if (typeof detailVisible === 'boolean') {
-        setVisible(Boolean(detailVisible));
-      } else {
-        setVisible(false);
-      }
+      const dv = e?.detail?.visible;
+      setVisible(typeof dv === 'boolean' ? dv : false);
     };
 
     window.addEventListener('show-faulty-terminal', showHandler);
     window.addEventListener('hide-faulty-terminal', hideHandler);
 
-    // If the matrix script set a global flag before React mounted, respect it:
-    // (Optional: matrixRain.js can set window.__showFaultyTerminal = true before dispatching)
+    // If the script set this before React mounted, honour it:
     if (window.__showFaultyTerminal) setVisible(true);
 
     return () => {
@@ -40,15 +28,19 @@ export default function Background() {
     };
   }, []);
 
-  // If not visible, render nothing (keeps DOM clean and respects CSS display:none)
   if (!visible) return null;
 
-  // Render the container; CSS class handles layout and z-index.
-  // Inline style ensures display is block while mounted.
   return (
-   <div style={{ width: '100%', height: '600px', position: 'relative', display: 'block', zindex: '10', ariahidden: 'true' }}>
-  <FaultyTerminal
-    scale={1.5}
+    <div
+      id="faultyTerminal"
+      className="faulty-terminal-container"
+      style={{ display: 'block', position: 'fixed', inset: 0, zIndex: 10, pointerEvents: 'none' }}
+      aria-hidden="true"
+    >
+      {/* Render your local FaultyTerminal component here.
+          If it expects props, pass them in (e.g. <FaultyTerminal foo={bar} />). */}
+      <FaultyTerminal
+      scale={1.5}
     gridMul={[2, 1]}
     digitSize={1.2}
     timeScale={1}
@@ -64,8 +56,7 @@ export default function Background() {
     mouseReact={false}
     mouseStrength={0.5}
     pageLoadAnimation={false}
-    brightness={1}
-  />
-</div>
+    brightness={1} />
+    </div>
   );
 }

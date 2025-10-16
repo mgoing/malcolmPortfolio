@@ -2,12 +2,12 @@
 /*@tailwind base;
 @tailwind components;
 @tailwind utilities;
-*/
+*/ /*
 #matrixCanvas { z-index: 5 !important; position: absolute; top:0; left:0; }
 .faulty-terminal-container {
   width:100%;
   height:100%;
-  position:absolute; /* absolute is better than relative for backgrounds */
+  position:absolute; 
   top:0;
   left:0;
   overflow:hidden;
@@ -19,5 +19,39 @@
 
 .sprite       { z-index: 30 !important; }
 .decrypted-text { z-index:30; }
+*/
 
+:root {
+  --bg-color: #071016;
+  --glow: #38ffab;
+}
 
+/* full-viewport background container (initially hidden via display none in original workflow,
+   but we intentionally show it in this demo by returning display:block from Background.jsx) */
+.faulty-terminal-container {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10; /* behind page content (z-index 30) */
+  pointer-events: none; /* background doesn't steal clicks */
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(0,0,0,0.65), rgba(0,0,0,0.85));
+}
+
+/* fallback content so you can see something while developing */
+.faulty-terminal-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.faulty-terminal-fallback .glow {
+  color: var(--glow);
+  font-family: 'Courier New', monospace;
+  font-size: 18px;
+  text-shadow: 0 0 10px rgba(56,255,171,0.25);
+  opacity: 0.95;
+}

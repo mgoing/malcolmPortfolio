@@ -1,75 +1,16 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Welcome</title>
-  <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Faulty Terminal — Dev</title>
+  </head>
+  <body>
+    <!-- Canvas/intro can live here later; for now we mount React root -->
+    <div id="root"></div>
 
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      height: 100%;
-      background: black;
-    }
-    #matrixCanvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 5;
-    }
-    #mainContent {
-      display: none;
-      position: relative;
-      z-index: 1;
-      color: white;
-      padding: 2rem;
-    }
-    
-  .sprite {
-    position: absolute;
-    width: 80px; 
-    height: 80px;
-    top: calc(80% - 64px);       /* same as groundY – spriteHeight */
-    left: 50%;      /* center */
-    transform: translateX(-50%);
-    display: none;  /* only one shown at a time */
-    pointer-events: none;
-    z-index: 35; /* above the canvas */
-  }
-  .sprite.left {
-  transform: translateX(-50%) scaleX(-1);
-  }
+    <!-- Vite entry (dev / build friendly) -->
+    <script type="module" src="/src/main.jsx"></script>
    
-
-
-  
-
-  </style>
-</head>
-<body>
-  <canvas id="matrixCanvas"></canvas>
-  <div id="mainContent">
-    <h1>Welcome to My Website-Remove this</h1>
-   
-    <div id="root"></div> <!--react-->
-     <div id="faultyTerminal" class="faulty-terminal-container"></div> 
-    
-  </div>
-
-  
-
-  <canvas id="navCanvas" style="display:none; background: transparent; position:absolute; top:0; left:0; z-index:20;"></canvas>
-  
-<!-- four hidden <img> elements, all absolutely centered -->
-<img id="sprite-standing" class="sprite" src="src/assets/StandingRight.png" />
-<img id="sprite-walking" class="sprite" src="src/assets/WalkingRight.png" />
-
-
-<script src="src/LegacyScript/matrixRain.js"></script>
-<script src="src/LegacyScript/nav.js"></script>
- <script type="module" src="src/main.jsx"></script>
-</body>
+  </body>
 </html>
