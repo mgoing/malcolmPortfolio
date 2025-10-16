@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Matrix Rain Effect</title>
+  <title>Welcome</title>
   <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
 
   <style>
@@ -17,7 +18,7 @@
       position: absolute;
       top: 0;
       left: 0;
-      z-index: 9999;
+      z-index: 5;
     }
     #mainContent {
       display: none;
@@ -36,12 +37,12 @@
     transform: translateX(-50%);
     display: none;  /* only one shown at a time */
     pointer-events: none;
-    z-index: 10000; /* above the canvas */
+    z-index: 35; /* above the canvas */
   }
   .sprite.left {
   transform: translateX(-50%) scaleX(-1);
   }
-  
+   
 
 
   
@@ -51,20 +52,24 @@
 <body>
   <canvas id="matrixCanvas"></canvas>
   <div id="mainContent">
-    <h1>Welcome to My Website</h1>
-    <p>This is the main content of your page.</p>
+    <h1>Welcome to My Website-Remove this</h1>
+   
+    <div id="root"></div> <!--react-->
+     <div id="faultyTerminal" class="faulty-terminal-container"></div> 
+    
   </div>
 
   
 
-  <canvas id="navCanvas" style="display:none; position:absolute; top:0; left:0; z-index:9999;"></canvas>
+  <canvas id="navCanvas" style="display:none; background: transparent; position:absolute; top:0; left:0; z-index:20;"></canvas>
   
 <!-- four hidden <img> elements, all absolutely centered -->
-<img id="sprite-standing" class="sprite" src="StandingRight.png" />
-<img id="sprite-walking" class="sprite" src="WalkingRight.png" />
+<img id="sprite-standing" class="sprite" src="src/assets/StandingRight.png" />
+<img id="sprite-walking" class="sprite" src="src/assets/WalkingRight.png" />
 
 
-<script src="matrixRain.js"></script>
-<script src="nav.js"></script>
+<script src="src/LegacyScript/matrixRain.js"></script>
+<script src="src/LegacyScript/nav.js"></script>
+ <script type="module" src="src/main.jsx"></script>
 </body>
 </html>

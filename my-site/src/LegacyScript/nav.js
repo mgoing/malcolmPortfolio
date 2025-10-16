@@ -4,12 +4,11 @@
 // TODO add actual link to new pages
 // TODO slow down speed of user
 //TODO text needs to be stylized better in a way that doesnt create lag. css keyframes and glowtext is too laggy
-
-
+//reactBits to add: decrypted text, ASCII text, Target Cursor, Magnet lines, Click Spark, Shape blur, Splash cursor, blob cursor, faulty terminal or dither or pixel blast
 
 (function() {
   const canvas = document.getElementById('navCanvas');
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext('2d', { alpha: true });
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
@@ -20,7 +19,8 @@
   const worldWidth = 3000;
   const doorXs = [800, 1200, 1800];
   const doorW = 96, doorH = 144;
-  const doorURLs = ['/underConstruction.html','/underConstruction.html','/underConstruction.html'];
+  const doorURLs = ['underConstruction.html','underConstruction.html','underConstruction.html'];
+  
 
   // --- SPRITE MANAGEMENT ---
   const spriteStanding = document.getElementById('sprite-standing');
@@ -32,6 +32,12 @@
   let atDoor = null;
   let worldOffset = 0;
 
+let glowStartTs;
+
+ const TIP_DELAY = 3000; // ms until tip appears 
+ const TIP_FADE = 1000; // fade in/out duration 
+ let tipState = 'waiting'; // 'waiting'|'fadeIn'|'show'|'fadeOut'|'done'
+
   // Flash animation state
   let flash = {
     active: false,
@@ -42,41 +48,36 @@
     totalDur: 700
   };
 
+  // --- IDLE / DECRYPT logic (NEW) ---
+  let lastMoveTs = performance.now();
+  const DECRYPT_DELAY = 4000; // ms of idle before it tells React to show DecryptedText (adjust X here)
+  let decryptedShown = false; // whether we've already told React to show the decrypted text
 
-    //new
-     let lastMoveTs = performance.now();
-  const TIP_DELAY = 3000;       // ms until tip appears
-  const TIP_FADE = 1000;        // fade in/out duration
-  let tipState = 'waiting';     // 'waiting'|'fadeIn'|'show'|'fadeOut'|'done'
-
-   let mx = 0, my = 0;
-  window.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-  });
-
-  let glowText = "Use 'A' & 'D' to move and 'Space Bar' to enter. Mobile support coming soon";
-  let glowAngle = 0;
-  let showGlowText = false;
-  let glowTimer = 4000; // in ms
-  let glowStartTs = null;
-  let afterTimer = true;
+let mx = 0, my = 0;
+ window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
 
   // --- INPUT ---
   window.addEventListener('keydown', e => {
-    
     if (flash.active) return;
+
     if (e.code === 'KeyA') { facing = 'L'; moving = true;  }
     if (e.code === 'KeyD') { facing = 'R'; moving = true; }
     if ((e.code === 'Enter' || e.code === 'Space') && atDoor !== null) {
       flash.active = true;
       flash.doorIndex = atDoor;
       flash.t = 0;
-      
     }
-      if (e.code === 'KeyA' || e.code === 'KeyD') {
+
+    if (e.code === 'KeyA' || e.code === 'KeyD') {
+      // user moved -> reset idle timer and hide decrypted text if it was showing
       lastMoveTs = performance.now();
+      // reset state flags
+      decryptedShown = false;
+      // notify React to hide decrypted text
+      window.dispatchEvent(new CustomEvent('nav-decrypted', { detail: { visible: false } }));
+
+      // you still have tipState logic; keep it consistent
       tipState = 'waiting';
-      showGlowText = false;
       afterTimer = false;
     }
   });
@@ -89,7 +90,6 @@
 
   // --- SPRITE DISPLAY ---
   function updateSprite() {
-    // Hide all
     allSprites.forEach(s => {
       s.style.display = 'none';
       s.classList.remove('left');
@@ -103,52 +103,35 @@
     }
   }
 
-//glow function
-function displayGlowText(){
-  glowAngle += 0.03;
-let offset = Math.sin(glowAngle) *10;
-
-ctx.save();
-ctx.textAlign = "center";
-ctx.font = '25px garamond-serif';
-
-ctx.fillStyle = "rgba(213, 241, 241, 1)";
-ctx.shadowColor = "#0ff";
-ctx.shadowBlur = 100;
-
-ctx.fillText(glowText, canvas.width/2 + offset, 80); 
-
-ctx.restore();
-} 
-
-
-
+  // NOTE: removed displayGlowText() entirely. React will handle the text.
 
   function loop(ts) {
     const dt = ts - (loop.lastTS || ts);
     loop.lastTS = ts;
 
     const since = ts - lastMoveTs;
-        if (!moving) {
-          if (since > TIP_DELAY + TIP_FADE*2 && tipState !== 'done') {
-            tipState = 'done';
-          } else if (since > TIP_DELAY + TIP_FADE && tipState === 'fadeIn') {
-            tipState = 'show';
-          } else if (since > TIP_DELAY && tipState === 'waiting') {
-            tipState = 'fadeIn';
-          } else if (since > TIP_DELAY + TIP_FADE && tipState === 'show') {
-            tipState = 'fadeOut';
-          }
-        }
 
-        //if bool && loop - performance.now > 5000
-        if (afterTimer === true && ts - glowStartTs > 3000){
-          showGlowText = true;
-          
-          
-        }
+    // existing tipState logic (kept as-is)
+   
+    if (!moving) {
+      if (since > TIP_DELAY + TIP_FADE*2 && tipState !== 'done') {
+        tipState = 'done';
+      } else if (since > TIP_DELAY + TIP_FADE && tipState === 'fadeIn') {
+        tipState = 'show';
+      } else if (since > TIP_DELAY && tipState === 'waiting') {
+        tipState = 'fadeIn';
+      } else if (since > TIP_DELAY + TIP_FADE && tipState === 'show') {
+        tipState = 'fadeOut';
+      }
+    } 
 
+    // --- NEW: dispatch decrypted-visible event once after DECRYPT_DELAY ms of idle ---
+    if (!decryptedShown && since >= DECRYPT_DELAY) {
+      decryptedShown = true;
+      window.dispatchEvent(new CustomEvent('nav-decrypted', { detail: { visible: true } }));
+    }
 
+    //new logic
     // movement
     if (!flash.active) {
       if (facing === 'R' && moving) worldOffset = Math.min(worldOffset + moveSpeed, worldWidth - canvas.width);
@@ -158,7 +141,7 @@ ctx.restore();
     // clear
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
- ctx.save();
+    ctx.save();
     const glowR = 30;
     const grad = ctx.createRadialGradient(mx, my, 0, mx, my, glowR);
     grad.addColorStop(0, 'rgba(255,255,255,0.4)');
@@ -168,9 +151,6 @@ ctx.restore();
     ctx.arc(mx, my, glowR, 0, Math.PI*2);
     ctx.fill();
     ctx.restore();
-
-
-    
 
     // ground
     ctx.strokeStyle = '#666';
@@ -222,35 +202,36 @@ ctx.restore();
         window.location.href = doorURLs[flash.doorIndex];
         return;
       }
-    }
+    } 
 
-if (tipState !== 'waiting' && tipState !== 'done') {
+    // tip alpha logic still present but does not draw canvas-based text anymore
+    if (tipState !== 'waiting' && tipState !== 'done') {
       let alpha = 1;
       const t = since - TIP_DELAY;
       if (tipState === 'fadeIn')      alpha = Math.min(t / TIP_FADE, 1);
       else if (tipState === 'fadeOut') alpha = 1 - Math.min((t - (TIP_FADE+1000)) / TIP_FADE, 1);
       else if (tipState === 'show')    alpha = 1;
-
-      
     }
-
-    if (showGlowText) {
-      displayGlowText();
-    }
-    
 
     updateSprite();
     requestAnimationFrame(loop);
-    
   } //function loop end
+
+
 
   // Entry point
   window.startNavigation = function() {
     const navCanvas = document.getElementById('navCanvas');
     document.getElementById('matrixCanvas').style.display = 'none';
+
+    
+    //const mainContent = document.getElementById('mainContent');
+    //mainContent.style.display = 'none'; //debugging <- ^^
+
     navCanvas.style.display = 'block';
-    glowStartTs = performance.now();
     loop.lastTS = performance.now();
+    glowStartTs = performance.now();
     requestAnimationFrame(loop);
   };
 })();
+

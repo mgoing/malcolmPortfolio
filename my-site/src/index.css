@@ -1,0 +1,23 @@
+@import "tailwindcss"; 
+/*@tailwind base;
+@tailwind components;
+@tailwind utilities;
+*/
+#matrixCanvas { z-index: 5 !important; position: absolute; top:0; left:0; }
+.faulty-terminal-container {
+  width:100%;
+  height:100%;
+  position:absolute; /* absolute is better than relative for backgrounds */
+  top:0;
+  left:0;
+  overflow:hidden;
+  z-index:10;
+  display: none;
+}
+#navCanvas    { z-index: 20 !important; position: absolute; top:0; left:0; }
+#mainContent  { z-index: 25 !important; position: relative; }
+
+.sprite       { z-index: 30 !important; }
+.decrypted-text { z-index:30; }
+
+

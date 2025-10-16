@@ -54,12 +54,18 @@ setTimeout(() => {
 
       const mainElThing = document.getElementById("mainContent");
       if (mainElThing) {
-        mainElThing.style.display = "none"; 
+        //mainElThing.style.display = "none";  //original
+        mainElThing.style.display = "block"; //changed to block for testing react
       }
+      window.__showFaultyTerminal = true;
+        window.dispatchEvent(new CustomEvent('show-faulty-terminal', { detail: { visible: true } })); //pair with for closing: window.__showFaultyTerminal = false; window.dispatchEvent(new CustomEvent('hide-faulty-terminal'));
+        window.__navDecrypted = true;
+        window.dispatchEvent(new CustomEvent('nav-decrypted', { detail: { visible: true } }));
+
       if (typeof window.startNavigation === "function") {
         window.startNavigation(); // hand over to nav.js
       }
-    }
+    } 
     canvas.style.opacity = opacity;
 
 
