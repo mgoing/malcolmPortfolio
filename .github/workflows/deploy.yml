@@ -1,21 +1,15 @@
-name: Build and Deploy to GitHub Pages
+name: Build and Deploy (my-site)
 
-# run on pushes to main (change branch as needed) and on manual workflow_dispatch
 on:
   push:
     branches:
       - main
   workflow_dispatch: {}
 
-# minimal permissions required to update GitHub Pages
 permissions:
   contents: write
   pages: write
   id-token: write
-
-
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 
 jobs:
   build-and-deploy:
@@ -33,7 +27,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'     # or your preferred LTS
+          node-version: '20'
 
       - name: Cache npm
         uses: actions/cache@v4
@@ -47,26 +41,21 @@ jobs:
         run: npm ci
         working-directory: my-site
 
-      - name: Build production (my-site)
+      - name: Build (my-site)
         run: npm run build
         working-directory: my-site
         env:
           CI: true
 
-      # --- Debugging helpers (optional; remove when confident) ---
-      - name: Show my-site/dist contents (debug)
+      - name: Show build artifacts (debug)
         if: always()
         run: |
-          echo "=== repo root ==="
-          ls -la
-          echo "=== my-site dir ==="
-          ls -la my-site
-          echo "=== my-site/dist dir ==="
+          echo ">>> my-site/dist listing"
           ls -la my-site/dist || true
         shell: bash
 
       - name: Deploy to gh-pages
-        uses: peaceiris/actions-gh-pages@v4
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          publish_dir: ./my-site/dist
