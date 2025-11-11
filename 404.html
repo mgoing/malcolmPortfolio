@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content="0;url=/" />
+    <script>
+      // Attempt to fallback to index.html so SPA router can pick the path
+      (function() {
+        try {
+          const url = '/' + location.pathname.replace(/^\//, '');
+          location.replace(url);
+        } catch(e) {
+          location.replace('/');
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <p>Redirecting…</p>
+  </body>
+</html>
