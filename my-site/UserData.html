@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Visitor Device Info — Local Preview</title>
+<style>
+  :root { --bg:#0b1220; --card:#0f1724; --accent:#7dd3fc; --muted:#9ca3af; color-scheme: dark; }
+  body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial; margin:0;background:linear-gradient(180deg,#02040a 0%,#071025 100%); color:#e6eef6;}
+  header{padding:18px 24px; display:flex; gap:16px; align-items:center;}
+  h1{margin:0; font-size:1.2rem;}
+  .wrap{display:grid; grid-template-columns: 360px 1fr; gap:18px; padding:18px;}
+  .card{background:var(--card); padding:14px; border-radius:12px; box-shadow:0 6px 18px rgba(2,6,23,0.6);}
+  .panel-title{font-weight:600; color:var(--accent); margin-bottom:8px;}
+  pre{white-space:pre-wrap; word-wrap:break-word; margin:0; font-size:0.85rem; color:#d6e9ff;}
+  .grid{display:grid; gap:10px;}
+  .row{display:flex; justify-content:space-between; font-size:0.9rem; color:var(--muted);}
+  .bar{height:10px; background:#0b1227; border-radius:6px; overflow:hidden; margin-top:6px;}
+  .bar > i{display:block; height:100%; width:0%; background:linear-gradient(90deg, #67e8f9,#60a5fa); border-radius:6px;}
+  button{background:transparent; border:1px solid #1f2937; color:var(--accent); padding:8px 10px; border-radius:8px; cursor:pointer;}
+  small{color:var(--muted);}
+  footer{padding:12px 18px; font-size:0.8rem; color:var(--muted);}
+  /* responsive */
+  @media (max-width:900px){ .wrap{grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>What your browser sees — local preview</h1>
+  <small>Shown only in this tab, not stored.</small>
+</header>
+
+<div class="wrap">
+  <div class="card">
+    <div class="panel-title">Quick Controls</div>
+    <div class="grid">
+      <div class="row">
+        <div>Request Geolocation</div>
+        <button id="btnGeo">Ask</button>
+      </div>
+      <div class="row">
+        <div>Check Battery</div>
+        <button id="btnBattery">Get</button>
+      </div>
+      <div class="row">
+        <div>Measure download speed</div>
+        <button id="btnSpeed">Run</button>
+      </div>
+      <div style="margin-top:8px"><small>Permissions are optional. No data will leave the browser unless you add network calls.</small></div>
+    </div>
+    <hr style="border:none;height:1px;background:#081127;margin:12px 0;">
+    <div class="panel-title">Snapshot (JSON)</div>
+    <pre id="dump">Collecting…</pre>
+  </div>
+
+  <div class="card">
+    <div class="panel-title">Visual Summary</div>
+    <div class="grid">
+      <div>
+        <div class="row"><div>CPU cores</div><div id="cores">—</div></div>
+        <div class="bar"><i id="coresBar"></i></div>
+      </div>
+
+      <div>
+        <div class="row"><div>Device memory (GB)</div><div id="mem">—</div></div>
+        <div class="bar"><i id="memBar"></i></div>
+      </div>
+
+      <div>
+        <div class="row"><div>Network (effective)</div><div id="net">—</div></div>
+        <div class="bar"><i id="netBar"></i></div>
+      </div>
+
+      <div>
+        <div class="row"><div>Screen (w × h)</div><div id="scr">—</div></div>
+        <div class="bar"><i id="scrBar"></i></div>
+      </div>
+
+      <div style="margin-top:6px;">
+        <div class="panel-title">Feature support</div>
+        <div id="features" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="card" style="margin:12px 18px;">
+  This site does not store or transmit this information. To change permissions, use your browser’s site settings.
+</footer>
+
+<script>
+(async function collectAndShow(){
+  const out = {};
+  // Page & location
+  out.url = location.href;
+  out.referrer = document.referrer || null;
+  out.hrefParts = {origin: location.origin, pathname: location.pathname, search: location.search, hash: location.hash};
+
+  // Navigator info
+  const nav = navigator;
+  out.userAgent = nav.userAgent;
+  out.language = nav.language;
+  out.languages = nav.languages;
+  out.platform = nav.platform;
+  out.cookieEnabled = nav.cookieEnabled;
+  out.onLine = nav.onLine;
+  out.hardwareConcurrency = nav.hardwareConcurrency || null;
+  out.deviceMemory = nav.deviceMemory || null;
+  out.vendor = nav.vendor || null;
+
+  // Screen & viewport
+  out.screen = {
+    width: screen.width, height: screen.height,
+    availWidth: screen.availWidth, availHeight: screen.availHeight,
+    colorDepth: screen.colorDepth, pixelDepth: screen.pixelDepth
+  };
+  out.viewport = {innerWidth: innerWidth, innerHeight: innerHeight, devicePixelRatio: devicePixelRatio};
+
+  // Performance
+  try { out.performanceTiming = performance?.timing ? {navigationStart: performance.timing.navigationStart, loadEventEnd: performance.timing.loadEventEnd} : null; } catch(e){ out.performanceTiming=null; }
+
+  // Network connection (may be undefined)
+  out.connection = (nav.connection) ? {
+    effectiveType: nav.connection.effectiveType,
+    downlink: nav.connection.downlink,
+    rtt: nav.connection.rtt,
+    saveData: nav.connection.saveData
+  } : null;
+
+  // Feature support checks
+  function yesno(x){ return x? true:false; }
+  out.features = {
+    geolocation: yesno(navigator.geolocation),
+    mediaDevices: yesno(navigator.mediaDevices && navigator.mediaDevices.enumerateDevices),
+    battery: yesno(navigator.getBattery),
+    deviceMemory: typeof navigator.deviceMemory !== 'undefined',
+    connection: yesno(navigator.connection),
+    serviceWorker: yesno('serviceWorker' in navigator),
+    localStorage: yesno(window.localStorage),
+    sessionStorage: yesno(window.sessionStorage),
+    cookies: navigator.cookieEnabled,
+    deviceOrientation: yesno(window.DeviceOrientationEvent),
+  };
+
+  // Minimal device enumeration (no permission required for names on some browsers)
+  try {
+    if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+      const devs = await navigator.mediaDevices.enumerateDevices();
+      out.mediaDevices = devs.map(d=>({kind:d.kind, label: d.label || null, deviceId: d.deviceId}));
+    }
+  } catch(e) { out.mediaDevices = null; }
+
+  // Put snapshot in UI
+  const dumpEl = document.getElementById('dump');
+  dumpEl.textContent = JSON.stringify(out, null, 2);
+
+  // Visuals: map to bars
+  const setBar = (id, value, max=16) => {
+    const el = document.getElementById(id);
+    el.style.width = Math.min(100, Math.round((value / max) * 100)) + '%';
+  };
+  document.getElementById('cores').textContent = out.hardwareConcurrency || '—';
+  document.getElementById('mem').textContent = out.deviceMemory || '—';
+  if (out.hardwareConcurrency) setBar('coresBar', out.hardwareConcurrency, 16);
+  if (out.deviceMemory) setBar('memBar', out.deviceMemory, 16);
+
+  document.getElementById('scr').textContent = `${out.screen.width} × ${out.screen.height}`;
+  setBar('scrBar', Math.min(out.screen.width, out.screen.height) / 10, 1000);
+
+  if (out.connection && out.connection.effectiveType) {
+    document.getElementById('net').textContent = `${out.connection.effectiveType} • ${out.connection.downlink||'—'} Mbps`;
+    // map effectiveType to relative value
+    const map = { 'slow-2g':5,'2g':10,'3g':50,'4g':90 };
+    setBar('netBar', map[out.connection.effectiveType]||60, 100);
+  } else {
+    document.getElementById('net').textContent = 'unknown';
+    setBar('netBar', 40, 100);
+  }
+
+  // feature badges
+  const featEl = document.getElementById('features');
+  for (const k of Object.keys(out.features)){
+    const on = out.features[k];
+    const el = document.createElement('div');
+    el.textContent = `${k}${on?'' : ' (no)'}`;
+    el.style.padding='6px 8px';
+    el.style.borderRadius='8px';
+    el.style.fontSize='0.8rem';
+    el.style.background = on ? 'rgba(125,211,252,0.08)' : 'transparent';
+    el.style.border = '1px solid rgba(125,211,252,0.08)';
+    featEl.appendChild(el);
+  }
+
+  // Buttons handlers
+  document.getElementById('btnGeo').addEventListener('click', ()=> {
+    if (!navigator.geolocation) { alert('Geolocation not supported'); return; }
+    navigator.geolocation.getCurrentPosition(pos=>{
+      dumpEl.textContent = JSON.stringify(Object.assign({}, out, {geolocation: {lat:pos.coords.latitude, lon:pos.coords.longitude, accuracy: pos.coords.accuracy}}), null, 2);
+    }, err=>{
+      dumpEl.textContent = JSON.stringify(Object.assign({}, out, {geolocationError: err.message}), null, 2);
+    }, {enableHighAccuracy:false, timeout:8000});
+  });
+
+  document.getElementById('btnBattery').addEventListener('click', async ()=>{
+    if (!navigator.getBattery) {
+      alert('Battery API not available');
+      return;
+    }
+    try {
+      const bat = await navigator.getBattery();
+      dumpEl.textContent = JSON.stringify(Object.assign({}, out, {battery:{charging:bat.charging, level:bat.level}}), null, 2);
+    } catch(e){ dumpEl.textContent = JSON.stringify(Object.assign({}, out, {batteryError: e.message}), null, 2); }
+  });
+
+  // Speed test (simple): needs a URL to a test file; if not present, we attempt to fetch current page as fallback.
+  document.getElementById('btnSpeed').addEventListener('click', async ()=>{
+    const url = location.origin + location.pathname; // fallback to current document
+    const sizeHintBytes = 50000; // unknown; using timing only (very rough)
+    const started = performance.now();
+    try {
+      const resp = await fetch(url + '?cache-bust=' + Date.now(), { mode: 'no-cors' });
+      // no-cors fetch doesn't expose body size; we still measure time as heuristic
+      const elapsed = (performance.now() - started) / 1000;
+      dumpEl.textContent = JSON.stringify(Object.assign({}, out, {speedEstimate:{ url, elapsedSeconds: elapsed, note: 'Rough estimate; host file size unknown when using no-cors. For accurate speed, host a dedicated test file (e.g., 1MB) and enable CORS.'}}), null, 2);
+    } catch (e) {
+      const elapsed = (performance.now() - started) / 1000;
+      dumpEl.textContent = JSON.stringify(Object.assign({}, out, {speedError: e.message, elapsedSeconds: elapsed}), null, 2);
+    }
+  });
+
+})();
+</script>
+</body>
+</html>
