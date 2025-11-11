@@ -9,7 +9,7 @@ on:
 
 # minimal permissions required to update GitHub Pages
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
