@@ -16,6 +16,7 @@ permissions:
 
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
 # However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -29,22 +30,43 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Use Node.js 20.x
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: '20'     # or your preferred LTS
 
-      - name: Install dependencies
+      - name: Cache npm
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-cache-my-site-${{ hashFiles('my-site/package-lock.json') }}
+          restore-keys: |
+            npm-cache-my-site-
+
+      - name: Install dependencies (my-site)
         run: npm ci
+        working-directory: my-site
 
-      - name: Build (production)
+      - name: Build production (my-site)
         run: npm run build
+        working-directory: my-site
         env:
           CI: true
+
+      # --- Debugging helpers (optional; remove when confident) ---
+      - name: Show my-site/dist contents (debug)
+        if: always()
+        run: |
+          echo "=== repo root ==="
+          ls -la
+          echo "=== my-site dir ==="
+          ls -la my-site
+          echo "=== my-site/dist dir ==="
+          ls -la my-site/dist || true
+        shell: bash
 
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          publish_dir: ./my-site/dist
