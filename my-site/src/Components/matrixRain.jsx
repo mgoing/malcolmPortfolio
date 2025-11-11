@@ -99,11 +99,17 @@ export default function MatrixRain({
     const fadeDuration = 700; // ms for fade to complete (you can tune this)
     const fadeDelay = introMs; // start after introMs
 
+
+
+
     function fadeTick(ts) {
       if (!fadeStarted) {
         fadeStarted = true;
         fadeStartTs = ts;
       }
+
+      const preloader = document.getElementById('preloader');
+if (preloader) preloader.style.display = 'none';
       const elapsed = ts - fadeStartTs;
       const progress = Math.min(1, elapsed / fadeDuration);
       const opacity = 1 - progress;

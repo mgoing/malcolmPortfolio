@@ -1,6 +1,7 @@
 // src/components/Background.jsx
 import React, { useEffect, useState } from 'react';
-import FaultyTerminal from './FaultyTerminal.jsx'; // <- your local file (FaultyTerminal.jsx)
+import FaultyTerminal from './RComponents/FaultyTerminal.jsx'; 
+import LetterGlitch from './RComponents/LetterGlitch.jsx';
 
 export default function Background() {
   const [visible, setVisible] = useState(false);
@@ -37,8 +38,7 @@ export default function Background() {
       style={{ display: 'block', position: 'fixed', inset: 0, zIndex: 10, pointerEvents: 'none' }}
       aria-hidden="true"
     >
-      {/* Render your local FaultyTerminal component here.
-          If it expects props, pass them in (e.g. <FaultyTerminal foo={bar} />). */}
+      {/* Add the preferred react bits background parameters here />). 
       <FaultyTerminal
       scale={1.5}
     gridMul={[2, 1]}
@@ -51,12 +51,20 @@ export default function Background() {
     noiseAmp={1}
     chromaticAberration={0}
     dither={0}
-    curvature={0}
-    tint="#ffffff"
-    mouseReact={false}
+    curvature={0.1}
+    tint="#7fef97ff"
+    mouseReact={true}
     mouseStrength={0.5}
     pageLoadAnimation={false}
     brightness={1} />
+    */}
+<LetterGlitch
+  glitchSpeed={50}
+  centerVignette={true}
+  outerVignette={false}
+  smooth={true}
+/>
+
     </div>
   );
 }

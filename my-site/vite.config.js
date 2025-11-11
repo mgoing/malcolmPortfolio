@@ -1,3 +1,4 @@
+import path from 'path';
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'  /* tailwindcss(), original to add this below*/ 
@@ -9,7 +10,7 @@ export default defineConfig({
   resolve: {
     // force any import of 'react-native' to use react-native-web
     alias: {
-      'react-native$': 'react-native-web'
+      'react-native$': 'react-native-web', "@": path.resolve(__dirname, "./src")
     },
     // make .web.js resolve first if packages provide it
     extensions: ['.web.js', '.js', '.jsx', '.ts', '.tsx', '.json']

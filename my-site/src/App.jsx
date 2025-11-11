@@ -1,20 +1,44 @@
-import React from 'react';
-import Background from './components/Background';
+import React, { useState } from 'react';
+
 import MatrixRain from './Components/matrixRain';
 
+import NavWindow from './Components/nav';
+import DecryptedEffect from './Components/DecryptedEffect';
+import RetroDesktop from './Components/Desktop';
+
+
 export default function App() {
+  const [showDesktop, setShowDesktop] = useState(false);
+
+  // called by NavWindow when correct password is entered
+  function handleAuthSuccess() {
+    setShowDesktop(true);
+    // optional: clear any intro flags, start desktop music etc.
+  }
+
   return (
     <>
-      {/* Background mounts and listens for events if you add them later */}
+      {/* If desktop visible, mount RetroDesktop and hide the intro UI */}
+      {showDesktop ? (
+        <RetroDesktop />
+      ) : (
+        <>
+          {/* Background / intro */}
+          <MatrixRain introMs={7000} fontSize={16} />
 
-      <MatrixRain introMs={7000} fontSize={16} />
-      <Background />
+          {/* Pass the onSuccess handler so NavWindow toggles the desktop in-app */}
+          <NavWindow
+            outerScale={0.8}
+            innerScale={0.8}
+            navClickUrl="/desktop" // harmless fallback if you later remove onSuccess
+            semiBgAlpha={0.45}
+            onSuccess={handleAuthSuccess}
+          />
 
-      {/* Minimal page scaffold so you can see layering */}
-      <main style={{ position: 'relative', zIndex: 30, padding: 24 }}>
-        <h1>React-Bits Faulty Terminal — test</h1>
-        <p>Background should appear behind this content (z-index control).</p>
-      </main>
+          <DecryptedEffect />
+          {/* ...rest of your intro UI */}
+        </>
+      )}
     </>
   );
 }

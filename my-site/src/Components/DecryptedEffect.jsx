@@ -1,16 +1,19 @@
 // src/components/DecryptedEffect.jsx
 import React, { useEffect, useState } from 'react';
-import DecryptedText from './DecryptedText'; 
+import DecryptedText from './RComponents/DecryptedText'; 
 
 export default function DecryptedEffect() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     if (window.__navDecrypted) {
-    function onNavDecrypted(e) {
-      setVisible(Boolean(e?.detail && e.detail.visible));
+      setVisible(true);
     }
-  }
+    const onNavDecrypted = (e) => {
+      const v = Boolean(e?.detail?.visible);
+      setVisible(v);
+    };
+  
     window.addEventListener('nav-decrypted', onNavDecrypted);
     return () => window.removeEventListener('nav-decrypted', onNavDecrypted);
   }, []);
