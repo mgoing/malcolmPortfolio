@@ -4,7 +4,7 @@ import MatrixRain from './Components/matrixRain';
 
 import NavWindow from './Components/nav';
 import DecryptedEffect from './Components/DecryptedEffect';
-import RetroDesktop from './Components/Desktop';
+import RetroDesktop from './Components/RetroDesktopFiles/Desktop';
 
 
 export default function App() {

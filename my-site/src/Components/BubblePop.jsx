@@ -1,163 +1,214 @@
 //Original code from my first ever coding project: https://openprocessing.org/sketch/1917633
 //Has been slightly modified from p5.JS to React requirements
 
-let circles = [];
-let startTime;
-let xxx
-let yyy
-let scoree = 0
-let elapsedTime = 0;
-let particles = [];
-let textFall = 110
-let staat = 1
-let slideSpeed
-let soundFile
+//TODO change the on-screen text to show uninterrupted
+//TODO Add footer where the bottom text is so the bubbles dont cover the on screen text
+
+import React, {useEffect, useRef, useState} from 'react';
+import bubbleImgSrc from '../assets/bubblePNG.png';
 
 
+export default function BubblePopGame() {
+  const containerRef = useRef(null);
+  const p5InstanceRef = useRef(null);
+  const sliderRef = useRef(null);
+  const [loading, setLoading] = useState(true);
 
-function preload() {
-	soundFormats('mp3', 'ogg', 'wav');
-  bubbleImg = loadImage("bubble pixel");
-	soundFile = loadSound('mixkit-serene-moments-27.mp3');
-}
+  useEffect(() => {
+    let mounted = true;
 
-function setup() {
-  createCanvas(windowWidth, windowHeight);
- // startTime = millis(); // record the start time
-	startTime = round(millis()/1000)
-	slideSpeed =createSlider(0, 5, 1, 0.5)
-	slideSpeed.position(200,50)
-	soundFile.play()
-	soundFile.loop()
-}
+    (async () => {
+      try {
+        const mod = await import("p5");
+        const p5 = mod.default || mod;
 
-function draw() {
-	elapsedTime = round(millis()/1000) - startTime
-	let gradient = drawingContext.createLinearGradient(0, 0, windowWidth, windowHeight);
-  gradient.addColorStop(0, '#E5F5FF');
-  gradient.addColorStop(1, '#F9D9F9');
+        const sketch = (p) => {
+          let circles = [];
+          let startTime;
+          let scoree = 0;
+          let elapsedTime = 0;
+          let particles = [];
+          let textFall = 110;
+          let slideSpeed;
+          let bubbleImg;
 
-  // set the canvas background to the gradient
-  drawingContext.fillStyle = gradient;
-  drawingContext.fillRect(0, 0, windowWidth, windowHeight);
-	
-	
-	push()
-	noStroke()
-	gradient.addColorStop(0, '#E8FFE5');
-  gradient.addColorStop(1, '#53F436');
+          p.setup = async () => {
+            // create canvas inside the container (new p5(..., container) already attaches it,
+            // but we still call createCanvas here)
+            p.createCanvas(500, 400);
+            startTime = Math.round(p.millis() / 1000);
 
-  
-  drawingContext.fillStyle = gradient;
-  drawingContext.fillRect(0,0, windowWidth, 110);
-	gradient.addColorStop(0, '#E8FFE5');
-  gradient.addColorStop(1, '#53F436');
-	drawingContext.fillRect(windowWidth-125, 100, 125, windowHeight);
-	
+            // loadImage uses callbacks in p5; wrap in Promise so we can await
+            bubbleImg = await new Promise((resolve, reject) => {
+              p.loadImage(
+                bubbleImgSrc,
+                (img) => resolve(img),
+                (err) => reject(err)
+              );
+            });
 
-	pop()
-	noStroke()
-	fill("black")
-	textSize(30)
-text("Score", windowWidth-95,50 )
-	text(scoree, windowWidth-95, 100)
-		text(elapsedTime, windowWidth-100,200)
-	textAlign(CENTER)
-	text("Bubble POP!", windowWidth/2, 50)
-		text("Pop the bubbles as fast as you can!", windowWidth/2, 75)
-	textSize(15)
-	text('Change Speed!', 253, 40)
-	
-	
-	for (let i = particles.length - 1; i >= 0; i--) {
-    particles[i].update();
-    particles[i].display();
-    if (particles[i].areDone()) {
-      particles.splice(i, 1);
-    }
-  }	
-	
-  // create a new circle 
-	  if (millis() - startTime < 30000 && frameCount % 10 === 0) {
-    circles.push({
-      x: random(windowWidth-125),
-      y: 110,
-    size: random(20, 50),
-    });
-  }
+            // Create slider and parent to the canvas container (use DOM parentNode)
+            slideSpeed = p.createSlider(0, 5, 1, 0.5);
 
-  // actually draw circles and move them
-  for (let i = 0; i < circles.length; i++) {
-    let circle = circles[i];
-    circle.y += slideSpeed.value();
-    image(bubbleImg, circle.x - circle.size/2, circle.y - circle.size/2, circle.size, circle.size);
-		noFill()
-		stroke('white')
-		
-		
-    // remove circle when clicked on
-    if (mouseIsPressed && dist(circle.x, circle.y, mouseX, mouseY) < circle.size/2) {
-      circles.splice(i, 1);
-			scoree = scoree + 1
-			createParticles(mouseX, mouseY)
-    }
-  } 
-    
-  
+            // p.canvas is a DOM element in p5 v2 — use parentNode / parentElement
+            const canvasParent = p.canvas?.parentNode || p.canvas?.parentElement || (p.canvas && p.canvas.parent);
+            // If canvasParent is valid, parent the slider to it. Otherwise, fallback to document body.
+            if (canvasParent && typeof slideSpeed.parent === "function") {
+              slideSpeed.parent(canvasParent);
+            } else if (typeof slideSpeed.parent === "function") {
+              // fallback: parent to the containerRef DOM node if available
+              if (containerRef.current) slideSpeed.parent(containerRef.current);
+              else slideSpeed.parent(document.body);
+            }
 
-	if (mouseX > 0 && mouseX < windowWidth-125 && mouseY > 110){
-		noCursor()
-		strokeWeight(2)
-	line(mouseX, 0, mouseX, windowWidth);
-	line(0, mouseY, windowWidth, mouseY);
+            // position the slider within that parent
+            try {
+              slideSpeed.position(10, 10);
+            } catch (e) {
+              // some environments don't allow position; ignore if it fails
+            }
 
-	circle(mouseX, mouseY, 50)
-	}
-	else{
-		cursor()
-	
+            sliderRef.current = slideSpeed;
 
-}
-	//your score at the end
-	if (circles.length > 0 && circles[circles.length-1].y > windowHeight) {
-  textFall = textFall + 1;
-  stroke('rgb(97,48,48)');
-  textSize(40);
-  text('Your Score: ' + scoree, windowWidth/2, textFall);
-}
-	
-}
+            // now the sketch is ready to draw
+            if (mounted) setLoading(false);
+          };
 
+          p.draw = () => {
+            // if image hasn't loaded yet, skip until setup finishes
+            if (!bubbleImg) return;
 
-class Particle {
-  constructor(x, y) {
-    this.pos = createVector(x, y);
-    this.vel = createVector(random(-5, 5), random(-5, 5));
-    this.acc = createVector(0, 0.1);
-    this.lifespan = 255;
-    this.color = color('rgb(184, 219, 255)');
-  }
+            elapsedTime = Math.round(p.millis() / 1000) - startTime;
+            const w = p.width;
+            const h = p.height;
 
-  update() {
-    this.vel.add(this.acc);
-    this.pos.add(this.vel);
-    this.lifespan -= 5;
-    this.color.setAlpha(this.lifespan);
-  }
+            // background gradient
+            const gradient = p.drawingContext.createLinearGradient(0, 0, w, h);
+            gradient.addColorStop(0, "#6e6e6fff");
+            gradient.addColorStop(1, "#F9D9F9");
+            p.drawingContext.fillStyle = gradient;
+            p.drawingContext.fillRect(0, 0, w, h);
 
-  display() {
-    noStroke();
-    fill(this.color);
-    ellipse(this.pos.x, this.pos.y, 10, 10);
-  }
+            // header
+            p.noStroke();
+            p.fill("black");
+            p.textSize(20);
+            p.textAlign(p.CENTER);
+            p.text("Bubble POP!", w / 2, 30);
+            p.textSize(14);
+            p.text("Pop bubbles as fast as you can!", w / 2, 50);
 
-  areDone() {
-    return this.lifespan <= 0;
-  }
-}
+            // HUD
+            p.textAlign(p.LEFT);
+            p.text(`Score: ${scoree}`, 10, h - 30);
+            p.text(`Time: ${elapsedTime}s`, 120, h - 30);
 
-function createParticles(x, y) {
-  for (let i = 0; i < 10; i++) {
-    particles.push(new Particle(x, y));
-  }
+            // particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+              particles[i].update();
+              particles[i].display(p);
+              if (particles[i].done()) particles.splice(i, 1);
+            }
+
+            // spawn bubbles for 30 seconds
+            if (p.millis() - startTime < 30000 && p.frameCount % 10 === 0) {
+              circles.push({
+                x: p.random(Math.max(1, w - 50)),
+                y: 70,
+                size: p.random(20, 50),
+              });
+            }
+
+            // draw & interact (iterate backwards because we may splice)
+            for (let i = circles.length - 1; i >= 0; i--) {
+              const c = circles[i];
+              c.y += slideSpeed.value();
+              if (bubbleImg) p.image(bubbleImg, c.x - c.size / 2, c.y - c.size / 2, c.size, c.size);
+
+              if (p.mouseIsPressed && p.dist(c.x, c.y, p.mouseX, p.mouseY) < c.size / 2) {
+                circles.splice(i, 1);
+                scoree++;
+                createParticles(p.mouseX, p.mouseY);
+              }
+            }
+
+            // falling text when bubbles reach bottom
+            if (circles.length > 0 && circles[circles.length - 1].y > h) {
+              textFall += 1;
+              p.textAlign(p.CENTER);
+              p.textSize(24);
+              p.fill("rgb(97,48,48)");
+              p.text(`Your Score: ${scoree}`, w / 2, textFall);
+            }
+          };
+
+          function createParticles(x, y) {
+            for (let i = 0; i < 10; i++) particles.push(new Particle(x, y));
+          }
+
+          class Particle {
+            constructor(x, y) {
+              this.pos = p.createVector(x, y);
+              this.vel = p.createVector(p.random(-5, 5), p.random(-5, 5));
+              this.acc = p.createVector(0, 0.1);
+              this.lifespan = 255;
+              this.color = p.color("rgb(184, 219, 255)");
+            }
+            update() {
+              this.vel.add(this.acc);
+              this.pos.add(this.vel);
+              this.lifespan -= 5;
+              this.color.setAlpha(this.lifespan);
+            }
+            display(pLocal) {
+              pLocal.noStroke();
+              pLocal.fill(this.color);
+              pLocal.ellipse(this.pos.x, this.pos.y, 10, 10);
+            }
+            done() {
+              return this.lifespan <= 0;
+            }
+          }
+        }; // end sketch
+
+        // instantiate p5 with the container element (containerRef.current)
+        if (mounted) {
+          p5InstanceRef.current = new p5(sketch, containerRef.current);
+        }
+      } catch (err) {
+        console.error("Failed to load p5 or run sketch:", err);
+        if (mounted) setLoading(false); // stop loading indicator
+      }
+    })();
+
+    return () => {
+      mounted = false;
+      try {
+        if (p5InstanceRef.current && typeof p5InstanceRef.current.remove === "function") {
+          p5InstanceRef.current.remove();
+          p5InstanceRef.current = null;
+        }
+        if (sliderRef.current && typeof sliderRef.current.remove === "function") {
+          sliderRef.current.remove();
+          sliderRef.current = null;
+        }
+      } catch (e) {
+        console.warn("Error during p5 cleanup", e);
+      }
+    };
+  }, []);
+
+  return (
+    <div
+      ref={containerRef}
+      className="w-full h-full bg-transparent flex items-center justify-center overflow-hidden"
+      style={{ minWidth: 500, minHeight: 400, position: "relative" }}
+    >
+      {loading && (
+        <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", pointerEvents: "none" }}>
+          <div style={{ color: "#cbd5e1", fontFamily: "monospace" }}>Loading game…</div>
+        </div>
+      )}
+    </div>
+  );
 }
