@@ -35,6 +35,11 @@ https://www.freepik.com/icon/face-scan_727392
 
 
 
+To add:
+https://ui.elevenlabs.io/docs/components/matrix
+https://fonts.google.com/specimen/Jersey+15?categoryFilters=Appearance:%2FTheme%2FPixel
+https://fonts.google.com/specimen/Jersey+10+Charted?categoryFilters=Appearance:%2FTheme%2FPixel
+
 
 
 

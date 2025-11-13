@@ -2,7 +2,7 @@
 
 import React, { useRef } from 'react';
 import Draggable from 'react-draggable';
-import bubblePNG from '../../assets/bubblePNG.png';
+import bubblePNG from '../../assets/bubblePNG2.jpg';
 import faceScan from '../../assets/faceScanFT.png';
 import backgroundSelector from '../../assets/backgroundSelector.jpg';
 import Fo4Terminal from '../../assets/retroTerminal.jpg';
