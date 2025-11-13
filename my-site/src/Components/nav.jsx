@@ -14,12 +14,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Background from './Background';
 import LetterGlitch from './RComponents/LetterGlitch'; // adjust if path differs
-import RetroDesktop from './Desktop';
+import RetroDesktop from './RetroDesktopFiles/Desktop';
 
 export default function NavWindow({
   outerScale = 0.8,
   innerScale = 0.8,
-  navClickUrl = '/desktop',
+  navClickUrl = '/desktop', //This might be irrelevant now
   shadow = true,
    onSuccess,
 }) {

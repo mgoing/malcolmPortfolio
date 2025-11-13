@@ -59,6 +59,7 @@
 
 
 
+
 /* full-viewport background container (initially hidden via display none in original workflow,
    but we intentionally show it in this demo by returning display:block from Background.jsx) */
 .faulty-terminal-container {
@@ -185,6 +186,8 @@
 
 /* optional footer / hint text styling (if needed) */
 .crt-footer small { color: rgba(255,255,255,0.06); }
+
+
 
 /* responsiveness */
 @media (max-width: 640px) {
