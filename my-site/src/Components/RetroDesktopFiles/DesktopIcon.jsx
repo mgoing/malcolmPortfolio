@@ -20,7 +20,8 @@ export const DEFAULT_APPS = [
 { id: 'bubblePop', title: 'Bubble Pop', icon: bubblePNG , defaultPos: { x: 460, y: 80 } },
 { id: 'background', title: 'Background Settings', icon: backgroundSelector, defaultPos:{x: 1000, y: 80}},
 { id: 'faceTracker', title: 'FaceTracker Dissertation', icon: faceScan, defaultPos: {x: 60, y: 180}},
-{ id: 'foTerminal', title: 'Terminal', icon: Fo4Terminal, defaultPos: {x: 160, y: 180}}
+{ id: 'foTerminal', title: 'Terminal', icon: Fo4Terminal, defaultPos: {x: 160, y: 180}},
+{ id: 'info', title: 'Site Info', icon: '📝', defaultPos: {x: 260, y: 180}}
 
 ];
 

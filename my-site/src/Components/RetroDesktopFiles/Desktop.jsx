@@ -116,21 +116,24 @@ useEffect(() => {
         return (
           <div className="p-3 text-sm">
             <h3 className="font-mono mb-2">Portfolio — UNDER CONSTRUCTION</h3>
+             <p>  </p>
           </div>
         );
       case 'about':
         return (
           <div className="p-3 text-sm">
             <h3 className="font-mono mb-2">About</h3>
+            <p> https://github.com/mgoing/ </p>
+            <p> https://www.linkedin.com/in/malcolmgoing/ </p>
           </div>
         );
       case 'terminal':
         return (
-          <div className="p-3 text-sm font-mono">Terminal (placeholder)</div>
+          <div className="p-3 text-sm font-mono">Terminal - UNDER CONSTRUCTION</div>
         );
       case 'projects':
         return (
-          <div className="p-3 text-sm">Projects placeholder</div>
+          <div className="p-3 text-sm">Projects - UNDER CONSTRUCTION</div>
         );
       case 'bubblePop':
         
@@ -151,13 +154,22 @@ useEffect(() => {
 
          case 'foTerminal':
         return (
-           <div className="p-3 text-sm">Terminal placeholder</div>
+           <div className="p-3 text-sm">Terminal - UNDER CONSTRUCTION</div>
         );
 
         case 'faceTracker':
         return (
-           <div className="p-3 text-sm">FaceTracker placeholder</div>
+           <div className="p-3 text-sm">FaceTracker - UNDER CONSTRUCTION</div>
         );
+
+        case 'info':
+        return (
+           <div className="p-3 text-sm">This site is fully custom built and designed by myself and hosted through Github, without any templates or scaffolding.
+           It primarily utilizes React JS and Tailwind CSS, with ReactBits Backgrounds as well. 
+           
+           </div>
+        );
+
        
        
       default:
