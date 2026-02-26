@@ -142,7 +142,7 @@ useEffect(() => {
 
       case 'projects':
               return (
-                <div className="p-3 text-sm">Projects -\n Currently continuing development of my MsC Thesis, dubbed "FaceTracker", and developing a companion app for a regenerative agriculture company</div>
+                <div className="p-3 text-sm">Projects: Currently continuing development of my MsC Thesis, dubbed "FaceTracker", and developing a companion app for a regenerative agriculture company</div>
               );
 
       case 'bubblePop':
@@ -323,6 +323,7 @@ if (desktopBg && desktopBg.type === 'gradient' && desktopBg.css) {
 
       {/* Taskbar (bottom) */}
       <div className="absolute left-0 right-0 bottom-0 z-50 p-2 bg-black/40 backdrop-blur-sm border-t border-white/5 flex items-center gap-2">
+         <div className="ml-2 text-xs font-mono text-white/80"> Desktop - Under Development</div>
          <div className="flex items-center gap-2 pr-4">
              {apps.filter(a => a.launched).map(a => (
                      <button
