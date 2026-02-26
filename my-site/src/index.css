@@ -187,6 +187,18 @@
 /* optional footer / hint text styling (if needed) */
 .crt-footer small { color: rgba(255,255,255,0.06); }
 
+.terminal-cursor {
+  color: #6bff9c;
+  margin-left: 2px;
+  animation: blink 1s steps(1) infinite;
+  text-shadow: 0 0 6px rgba(56,255,171,0.4);
+}
+
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
 
 
 /* responsiveness */

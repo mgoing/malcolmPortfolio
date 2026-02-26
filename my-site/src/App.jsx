@@ -36,7 +36,7 @@ export default function App() {
           />
 
           <DecryptedEffect />
-          {/* ...rest of your intro UI */}
+          
         </>
       )}
     </>

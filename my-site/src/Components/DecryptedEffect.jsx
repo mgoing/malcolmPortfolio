@@ -34,7 +34,7 @@ export default function DecryptedEffect() {
       }}
     >
       <DecryptedText
-        text="Use 'A' & 'D' to move and 'Space Bar' to enter. Mobile support coming soon"
+        text="Secret Password: Beluga"
         speed={60}
         maxIterations={18}
         characters="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#"
