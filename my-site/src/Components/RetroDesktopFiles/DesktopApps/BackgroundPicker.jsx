@@ -2,8 +2,8 @@
 import React, { useState } from 'react';
 
 // import images so bundler resolves them
-import crtGridImg from '../../assets/crt-grid.png';
-import retroNeonImg from '../../assets/retroNeonThis.jpg';
+import crtGridImg from '../../../assets/crt-grid.png';
+import retroNeonImg from '../../../assets/retroNeonThis.jpg';
 
 
 const PRESETS = [
@@ -17,7 +17,7 @@ const PRESETS = [
     colors: ['#041022', '#6a2ea5'],
     css: 'linear-gradient(180deg,#041022 0%, #a0cadc 50%, #6a2ea5 100%)',
   },
-  { key: 'soft-blue', label: 'Soft Blue', type: 'solid', color: '#6bbcc5' },
+  { key: 'soft-blue', label: 'Soft Blue', type: 'solid', color: '#6bc576' },
 ];
 
 // produce CSS from two colors

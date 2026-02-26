@@ -1,0 +1,21 @@
+OK i need to remember the structure of this site so I can properly interact and update in the future
+
+README.md has public "citations". Declare inspriations and any content used from other sources
+
+
+DEV TEST
+Terminal > cd my-site > npm run dev > https://localhost:5173/
+
+cd to my-site then npx vite to run test server in terminal
+
+Flow-
+Matrix rain > Password input > Home Page
+
+/src holds the content
+I believe /index.html is the landing page that react and vite mount on top
+
+/src/RetroDesktopFiles/Desktop.jsx --------HOME PAGE-------------------------
+Holds the activation of home page. AppContent switch holds each activation. Replace with imported function
+
+/src/RetroDesktopFiles/DesktopIcon.jsx --------SUPPORT PAGE FOR HOME------------
+add desktop apps in here. Title, app icon, etc. 

@@ -2,7 +2,13 @@ This is a static site to showcase projects and more!
 
 Built with react, Vite, Tailwind, ReactBits
 
-cd to my-site then npx vite to run test server in terminal
+
+
+
+
+
+
+
 
 Inspiration list:
 https://dev.to/cbms26/how-i-built-a-retro-terminal-panel-in-react-1gjp
@@ -14,7 +20,7 @@ https://codepen.io/jcubic/pen/BwBYOZ
 inspo: https://dev.to/cbms26/how-i-built-a-retro-terminal-panel-in-react-1gjp
 
 
-Add updating instructions here:
+
 
 
 Bubble image source:
@@ -39,7 +45,7 @@ To add:
 https://ui.elevenlabs.io/docs/components/matrix
 https://fonts.google.com/specimen/Jersey+15?categoryFilters=Appearance:%2FTheme%2FPixel
 https://fonts.google.com/specimen/Jersey+10+Charted?categoryFilters=Appearance:%2FTheme%2FPixel
-
+https://globe.gl/
 
 
 

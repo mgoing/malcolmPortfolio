@@ -6,24 +6,39 @@ import bubblePNG from '../../assets/bubblePNG2.jpg';
 import faceScan from '../../assets/faceScanFT.png';
 import backgroundSelector from '../../assets/backgroundSelector.jpg';
 import Fo4Terminal from '../../assets/retroTerminal.jpg';
+import alertSiteDetails from '../../assets/alertSiteDetails.png';
 
 
 
 
 // App registry: add or reorder entries here. Keep `id` unique.
 export const DEFAULT_APPS = [
-{ id: 'portfolio', title: 'Portfolio', icon: '📁', defaultPos: { x: 60, y: 80 } },
+{ id: 'portfolio', title: 'Web Design', icon: '📁', defaultPos: { x: 260, y: 180 }, navUrl: '/landing.html'},
 { id: 'about', title: 'About', icon: '📝', defaultPos: { x: 160, y: 80 } },
-{ id: 'terminal', title: 'Terminal', icon: '▶', defaultPos: { x: 260, y: 80 } },
+{ id: 'retroTerminal', title: 'Terminal', icon: '💻', defaultPos: { x: 260, y: 80 } },
 { id: 'projects', title: 'Projects', icon: '💾', defaultPos: { x: 360, y: 80 } },
 
 { id: 'bubblePop', title: 'Bubble Pop', icon: bubblePNG , defaultPos: { x: 460, y: 80 } },
-{ id: 'background', title: 'Background Settings', icon: backgroundSelector, defaultPos:{x: 1000, y: 80}},
-{ id: 'faceTracker', title: 'FaceTracker Dissertation', icon: faceScan, defaultPos: {x: 60, y: 180}},
-{ id: 'foTerminal', title: 'Terminal', icon: Fo4Terminal, defaultPos: {x: 160, y: 180}},
-{ id: 'info', title: 'Site Info', icon: '📝', defaultPos: {x: 260, y: 180}}
+{ id: 'background', title: 'Background Settings', icon: backgroundSelector, defaultPos:{x: 60, y: 80}},
+{ id: 'faceTracker', title: 'FaceTracker Thesis', icon: faceScan, defaultPos: {x: 60, y: 180}},
+{ id: 'foTerminal', title: 'FO Terminal', icon: Fo4Terminal, defaultPos: {x: 160, y: 180}},
+{ id: 'info', title: 'Site Info', icon: alertSiteDetails, defaultPos: {x: 1000, y: 80}},  
+
+//hidden apps not in desktop
+{  id: 'minimalApple', title: 'Minimal Apple', hidden: true},
+{  id: 'minimalAppleAbout', title: 'About', hidden: true},
+{  id: 'minimalAppleBlog', title: 'Blog', hidden: true},
+{  id: 'glassLanding', title: 'Glassmorphism', hidden: true},
+{  id: 'cleanLanding', title: 'Clean Corporate', hidden: true},
+{  id: 'cleanAbout', title: 'About', hidden: true},
+{  id: 'cleanBlog', title: 'Blog', hidden: true},
+{  id: 'glassAbout', title: 'About', hidden: true},
+{  id: 'glassBlog', title: 'About', hidden: true}
 
 ];
+
+
+
 
 //
 // Small helper component that encapsulates the Draggable icon
@@ -38,6 +53,14 @@ export function DesktopIcon({ app, onDoubleClick, onDragStop }) {
 // Detect whether the icon value is an image path or an emoji/string
 const isImage = typeof app.icon === 'string' && (app.icon.endsWith('.png') || app.icon.endsWith('.jpg') || app.icon.endsWith('.jpeg') || app.icon.endsWith('.svg'));
 
+function onDoubleClickIcon() {
+  if (app.navUrl) {
+    window.location.href = app.navUrl;
+    return;
+  }
+  // else open as app in desktop
+  onDoubleClick(app.id);
+}
 
 return (
     <Draggable

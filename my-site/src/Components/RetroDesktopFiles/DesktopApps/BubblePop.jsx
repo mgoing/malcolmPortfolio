@@ -5,7 +5,7 @@
 //TODO Add footer where the bottom text is so the bubbles dont cover the on screen text
 
 import React, {useEffect, useRef, useState} from 'react';
-import bubbleImgSrc from '../assets/bubblePNG.png';
+import bubbleImgSrc from '../../../assets/bubblePNG.png';
 
 
 export default function BubblePopGame() {

@@ -17,14 +17,28 @@
 
 
 
+
+
 import React, { useEffect, useState, useRef, createRef, Suspense } from 'react';
 import { DEFAULT_APPS, DesktopIcon } from './DesktopIcon';
 import Draggable from 'react-draggable';
 import ErrorBoundary from './ErrorBoundary';
-import BackgroundPicker from './BackgroundPicker';
+import BackgroundPicker from './DesktopApps/BackgroundPicker';
+
+import RetroTerminal from './DesktopApps/RetroTerminal';
 
 
-const BubblePopGame = React.lazy(() => import('../BubblePop'));
+
+import SiteExamples from '../SiteExamples/SiteExamples';
+import AboutTemplate from '../SiteExamples/AboutTemplate';
+import BlogTemplate from '../SiteExamples/BlogTemplate';
+
+import MinimalApple, {CleanLanding, GlassLanding} from '../SiteExamples/LandingPages';
+
+
+
+
+const BubblePopGame = React.lazy(() => import('./DesktopApps/BubblePop'));
 const STORAGE_KEY = 'retro_desktop_state_v1';
 const BG_STORAGE_KEY = 'retro_desktop_bg_v1';
 
@@ -52,13 +66,13 @@ export default function RetroDesktop() {
   const [apps, setApps] = useState(() => {
     const saved = loadState();
     if (saved && saved.apps) return saved.apps;
-    return DEFAULT_APPS.map(a => ({ ...a, pos: a.defaultPos, open: false, minimized: false, z: 0, launched: false }));
+    return DEFAULT_APPS.map(a => ({ ...a, pos: a.defaultPos || { x: 120, y: 120 }, open: false, minimized: false, z: 0, launched: false }));
   });
 
   const [desktopBg, setDesktopBg] = useState(() => {
   try {
     const raw = localStorage.getItem(BG_STORAGE_KEY);
-    return raw ? JSON.parse(raw) : { type: 'gradient', css: 'linear-gradient(180deg,#041022 0%, #00121a 50%, #06010b 100%)' };
+    return raw ? JSON.parse(raw) : { type: 'gradient', css: 'radial-gradient(ellipse at center, #3fa530 0%, #1f8641 45%, #092b14 100%)' };
   } catch (e) {
     return { type: 'gradient', css: 'linear-gradient(180deg,#041022 0%, #00121a 50%, #06010b 100%)' };
   }
@@ -113,63 +127,123 @@ useEffect(() => {
   function AppContent({ id }) {
     switch (id) {
       case 'portfolio':
-        return (
-          <div className="p-3 text-sm">
-            <h3 className="font-mono mb-2">Portfolio — UNDER CONSTRUCTION</h3>
-             <p>  </p>
-          </div>
-        );
+              return (
+                <SiteExamples openApp={openApp} />
+              );
       case 'about':
-        return (
-          <div className="p-3 text-sm">
-            <h3 className="font-mono mb-2">About</h3>
-            <p> https://github.com/mgoing/ </p>
-            <p> https://www.linkedin.com/in/malcolmgoing/ </p>
-          </div>
-        );
-      case 'terminal':
-        return (
-          <div className="p-3 text-sm font-mono">Terminal - UNDER CONSTRUCTION</div>
-        );
+              return (
+                <div className="p-3 text-sm">
+                  <h3 className="font-mono mb-2">About</h3>
+                  <p> https://github.com/mgoing/ </p>
+                  <p> https://www.linkedin.com/in/malcolmgoing/ </p>
+                </div>
+              );
+      
+
       case 'projects':
-        return (
-          <div className="p-3 text-sm">Projects - UNDER CONSTRUCTION</div>
-        );
+              return (
+                <div className="p-3 text-sm">Projects -\n Currently continuing development of my MsC Thesis, dubbed "FaceTracker", and developing a companion app for a regenerative agriculture company</div>
+              );
+
       case 'bubblePop':
-        
-       return(
-          <Suspense fallback={<div className="p-3"> Loading Game...</div>}>
-            <BubblePopGame />
-          </Suspense>
-       );
+              return(
+                  <Suspense fallback={<div className="p-3"> Loading Game...</div>}>
+                    <BubblePopGame />
+                  </Suspense>
+              );
 
         case 'background':
-        return (
-          <BackgroundPicker
-      current={desktopBg}
-      onApply={(sel) => setDesktopBg(sel)}
-      onClose={() => closeApp('background')}
-    />
-        );
+                return (
+                  <BackgroundPicker
+                    current={desktopBg}
+                    onApply={(sel) => setDesktopBg(sel)}
+                    onClose={() => closeApp('background')}
+                  />
+                );
 
-         case 'foTerminal':
-        return (
-           <div className="p-3 text-sm">Terminal - UNDER CONSTRUCTION</div>
-        );
+        case 'foTerminal':
+                return (
+                  <div className="p-3 text-sm">Secondary Terminal - UNDER CONSTRUCTION</div>
+                );
 
         case 'faceTracker':
-        return (
-           <div className="p-3 text-sm">FaceTracker - UNDER CONSTRUCTION</div>
-        );
+                return (
+                  <div className="p-3 text-sm">FaceTracker - UNDER CONSTRUCTION</div>
+                );
 
         case 'info':
-        return (
-           <div className="p-3 text-sm">This site is fully custom built and designed by myself and hosted through Github, without any templates or scaffolding.
-           It primarily utilizes React JS and Tailwind CSS, with ReactBits Backgrounds as well. 
-           
-           </div>
-        );
+                return (
+                  <div className="p-3 text-sm">Welcome! This ongoing project serves as a location to showcase projects and test React features. This site was designed to emulate a desktop experience, within your browser. This static site is fully custom built and designed by myself and hosted through Github.
+                    
+                  
+                  </div>
+                );
 
+        case 'retroTerminal':
+          return( <RetroTerminal  />
+         
+          );
+
+        //BELOW--------- For site example dynamic opening. Should be restructured into seperate case loop
+        case 'minimalApple':
+          return <MinimalApple openApp={openApp} />;
+
+          case 'glassLanding':
+            return <GlassLanding openApp={openApp} />;
+
+          case 'cleanLanding':
+            return <CleanLanding openApp={openApp} />;  
+            
+            case 'minimalAppleAbout':
+              return <AboutTemplate
+                styleKey="minimalApple"
+                themeClass="style-minimal"
+                title="Minimal Apple"
+                openApp={openApp}
+              />;
+
+            case 'minimalAppleBlog':
+              return <BlogTemplate
+                styleKey="minimalApple"
+                themeClass="style-minimal"
+                title="Minimal Apple"
+                openApp={openApp}
+              />;
+
+            case 'glassLandingAbout':
+              return <AboutTemplate
+                styleKey="glassLanding"
+                themeClass="style-glass"
+                title="Glassmorphism"
+                openApp={openApp}
+              />;
+
+            case 'glassLandingBlog':
+              return <BlogTemplate
+                styleKey="glassLanding"
+                themeClass="style-glass"
+                title="Glassmorphism"
+                openApp={openApp}
+              />;
+
+            case 'cleanLandingAbout':
+              return <AboutTemplate
+                styleKey="cleanLanding"
+                themeClass="style-clean"
+                title="Clean Corporate"
+                openApp={openApp}
+              />;
+
+            case 'cleanLandingBlog':
+              return <BlogTemplate
+                styleKey="cleanLanding"
+                themeClass="style-clean"
+                title="Clean Corporate"
+                openApp={openApp}
+              />;
+
+                  //END SiteExamples------------------
+        
        
        
       default:
@@ -191,7 +265,9 @@ if (desktopBg && desktopBg.type === 'gradient' && desktopBg.css) {
   baseBgStyle.backgroundPosition = 'center';
   baseBgStyle.backgroundRepeat = 'no-repeat';
 } else {
-  baseBgStyle.background = 'linear-gradient(180deg,#041022 0%, #66b45eff 50%, #5b4a6cff 100%)';
+  baseBgStyle.background = 'radial-gradient(ellipse at center, #50da3b 0%, #249e4d 60%, #0c3a1b 100%)';
+  //'linear-gradient(180deg,#041022 0%, #66b45eff 50%, #5b4a6cff 100%)'; 
+  //original  'radial-gradient(ellipse at center, #1f566d 0%, #0f2a3d 60%, #02060a 100%)';
 }
 
 
@@ -202,20 +278,22 @@ if (desktopBg && desktopBg.type === 'gradient' && desktopBg.css) {
       {/* Background: CRT vibe */}
       <div className="absolute inset-0" style={{ ...baseBgStyle }} />
 
+
+
       {/* scanlines + vignette overlay */}
-      <div className="pointer-events-none absolute inset-0 mix-blend-screen">
+      <div className="pointer-events-none absolute inset-0 " /*mix-blend-screen*/> 
         <div className="absolute inset-0 opacity-20" style={{
-          backgroundImage: 'repeating-linear-gradient(180deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 3px)'
+          backgroundImage: 'repeating-linear-gradient(180deg, rgba(255,255,255,0.10) 0px, rgba(255,255,255,0.10) 1px, transparent 1px, transparent 3px)'
         }} />
         <div className="absolute inset-0" style={{
-          boxShadow: 'inset 0 200px 200px rgba(0,0,0,0.6)'
+         // boxShadow: 'inset 0 125px 125px rgba(0,0,0,0.25)'
         }} />
       </div>
 
       {/* Desktop Content Area */}
       <div className="absolute inset-0 p-6">
         {/* Icons (moved to desktopIcons.jsx) */}
-        {apps.map(app => (
+        {apps.filter(app => !app.hidden).map(app => (
           <DesktopIcon
             key={app.id}
             app={app}
@@ -244,35 +322,63 @@ if (desktopBg && desktopBg.type === 'gradient' && desktopBg.css) {
       </div>
 
       {/* Taskbar (bottom) */}
-      <div className="absolute left-0 right-0 bottom-0 p-2 bg-black/40 backdrop-blur-sm border-t border-white/5 flex items-center gap-2">
-        <div className="ml-2 text-xs font-mono text-white/80"> Desktop - Under Development</div>
-        <div className="flex-1" />
-        <div className="flex items-center gap-2 pr-4">
-            {apps.filter(a => a.launched).map(a => (
-              <button
-                key={`tb-${a.id}`}
-                onClick={() => {
-                  if (!a.open) {
-                    // if the app was launched but closed (rare), open it again
-                    openApp(a.id);
-                  } else if (a.minimized) {
-                    // restore and bring to front
-                    setApps(prev => prev.map(x => x.id === a.id ? { ...x, minimized: false, open: true, z: zCounter + 1 } : x));
-                    setZCounter(z => z + 1);
-                  } else {
-                    // minimize if it's open and active
-                    toggleMinimize(a.id);
-                  }
-                }}
-                className="px-2 py-1 text-xs font-mono border rounded bg-white/5 hover:bg-white/10 no-drag"
-                aria-pressed={a.open && !a.minimized}
-                title={a.title}
-              >
-                {a.title}
-              </button>
-            ))}
-          </div>
-      </div>
+      <div className="absolute left-0 right-0 bottom-0 z-50 p-2 bg-black/40 backdrop-blur-sm border-t border-white/5 flex items-center gap-2">
+         <div className="flex items-center gap-2 pr-4">
+             {apps.filter(a => a.launched).map(a => (
+                     <button
+                          key={`tb-${a.id}`}
+                          onClick={() => {
+                              if (!a.open) {
+                             // Re-open if closed
+                              openApp(a.id);
+                              } else if (a.minimized) {
+                             // Restore + bring to front
+                                 setApps(prev =>
+                                  prev.map(x => x.id === a.id
+                                    ? { ...x, minimized: false, open: true, z: zCounter + 1 }    : x));
+                                          setZCounter(z => z + 1);
+                                            } else {
+                                                // Minimize if currently open
+                                              toggleMinimize(a.id);
+                                        }
+                                      }}
+                                      className={`relative px-2 py-1 text-xs font-mono text-white/90 border rounded no-drag transition-all duration-150
+                                        ${a.minimized
+                                          ? 'bg-white/5 opacity-60 border-white/10'
+                                          : 'bg-white/15 border-yellow-400 shadow-inner'
+                                        }`}
+                                      aria-pressed={a.open && !a.minimized}
+                                      title={a.title}
+                                    >
+                                      <div className="flex items-center gap-2">
+                                        {/* Icon renderer (same logic as DesktopIcon.jsx) */}
+                                        <div className="w-4 h-4 flex items-center justify-center">
+                                          {typeof a.icon === 'string' &&
+                                          (a.icon.endsWith('.png') ||
+                                            a.icon.endsWith('.jpg') ||
+                                            a.icon.endsWith('.jpeg') ||
+                                            a.icon.endsWith('.svg')) ? (
+                                            <img
+                                              src={a.icon}
+                                              alt={a.title}
+                                              className="w-full h-full object-contain"
+                                            />
+                                          ) : (
+                                        <span className="text-sm">{a.icon}</span>
+                                     )}
+                                  </div>
+
+                                 <span className="hidden md:inline">{a.title}</span>
+                              </div>
+
+                           {/* Active window indicator (retro strip) */}
+                           {!a.minimized && a.open && (
+                               <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-yellow-400" />
+                           )}
+                    </button>
+                  ))}
+                </div>
+                  </div>
     </div>
   );
 }
@@ -297,11 +403,16 @@ function AppWindow({ app, children, bringToFront, onClose, onMinimize, zIndex })
     >
       <div
         ref={nodeRef}
-        style={{ zIndex: zIndex || 1 }}
-        className="absolute w-[520px] max-w-[90%] bg-[#08121b]/80 border border-white/8 rounded shadow-2xl"
+        style={{ zIndex: zIndex || 1, resize: 'both', overflow: 'hidden' }}
+       // className="absolute w-[520px] max-w-[90%] bg-[#08121b]/80 border border-white/8 rounded shadow-2xl"
+       className={`absolute w-[520px] max-w-[90%] rounded shadow-2xl transition-all duration-150
+          ${app.z === zIndex 
+            ? 'bg-[#08121b]/90 border border-cyan-400/40 shadow-[0_0_25px_rgba(0,255,200,0.15)]'
+            : 'bg-[#08121b]/70 border border-white/10'
+          }`}
       >
         <div
-          className="win-drag-handle flex items-center justify-between px-3 py-2 cursor-grab bg-gradient-to-b from-black/30 to-transparent border-b border-white/5"
+          className="win-drag-handle flex items-center justify-between px-3 py-2 cursor-grab bg-gradient-to-b from-[#0a1a24] to-[#03070c] border-b border-cyan-400/10 backdrop-blur-sm"
           role="toolbar"
         >
            <div className="flex items-center gap-2">
@@ -351,7 +462,7 @@ function AppWindow({ app, children, bringToFront, onClose, onMinimize, zIndex })
         </div>
 
         <div className="p-0 text-white/95">
-          <div className="bg-black/60 p-2" style={{ minHeight: "160px" }}>
+          <div className="bg-gradient-to-b from-black/50 to-black/70 backdrop-blur-[2px] p-2" style={{ minHeight: "160px" }}>
             {children}
           </div>
         </div>

@@ -1,0 +1,48 @@
+/* siteExamples.css - light weight styles for the example pages */
+.se-root { font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; color: #e8f6ff; }
+.se-container { max-width:1100px; margin:0 auto; padding:20px; }
+.se-header { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.se-brand { display:flex; gap:12px; align-items:center; }
+.se-logo { width:44px; height:44px; border-radius:10px; display:grid; place-items:center; font-weight:700; color:#001; background:linear-gradient(135deg,#004a57,#00e5ff); }
+.se-nav { display:flex; gap:8px; align-items:center; }
+.se-nav button { background:transparent; border:0; color:#cde7ef; padding:8px 10px; border-radius:8px; cursor:pointer; font-size:14px; }
+.se-nav button.primary { background: rgba(255,255,255,0.07); color:#fff; }
+
+.se-hero { display:flex; align-items:center; gap:20px; margin-top:20px; padding:24px; border-radius:12px; background: rgba(255,255,255,0.02); }
+.se-hero .left { flex:1; }
+.se-hero h1 { margin:0; font-size:30px; }
+.se-hero p { color:#9fb3c8; margin-top:8px; }
+
+.se-grid { display:grid; gap:12px; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); margin-top:16px; }
+.se-card { background: rgba(255,255,255,0.03); padding:14px; border-radius:10px; border:1px solid rgba(255,255,255,0.03); }
+
+.se-style-catalog { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; }
+
+.se-style-card { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:14px; border-radius:12px; cursor:pointer; border:1px solid rgba(255,255,255,0.03); transition: transform .12s ease, box-shadow .12s ease; }
+.se-style-card:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(0,0,0,0.4); }
+.se-style-title { font-weight:700; margin-bottom:6px; }
+.se-style-desc { color:#9fb3c8; font-size:13px; }
+
+.se-preview { height:100px; border-radius:8px; margin-top:10px; overflow:hidden; border:1px solid rgba(255,255,255,0.02); }
+
+.se-footer { margin-top:28px; color:#9fb3c8; text-align:center; }
+
+/* --- per-style modifiers --- */
+/* Minimal Apple (soft, white card) */
+.style-minimal .se-logo { background: linear-gradient(135deg,#ffffff,#f0f7fb); color:#001; box-shadow: 0 6px 18px rgba(0,0,0,0.12); }
+.style-minimal .se-hero { background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)); color:#012; }
+.style-minimal .se-card { background: #ffffff10; color:#e9fbff; }
+
+/* Glass (frosted) */
+.style-glass .se-hero { background: rgba(255,255,255,0.04); backdrop-filter: blur(6px) saturate(120%); }
+.style-glass .se-logo { background: linear-gradient(135deg,#6bbcc5,#7af3ff); color:#001; }
+
+/* Clean corporate */
+.style-clean .se-hero { background: linear-gradient(90deg,#071322,#052f45); color:#dff6ff; }
+.style-clean .se-logo { background: linear-gradient(90deg,#0f9bd6,#00b3ff); color:#fff; }
+
+/* Small responsive */
+@media (max-width:720px){
+  .se-hero { flex-direction:column; align-items:flex-start; }
+  .se-preview { height:80px; }
+}
