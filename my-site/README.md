@@ -14,7 +14,7 @@ Inspiration list:
 https://dev.to/cbms26/how-i-built-a-retro-terminal-panel-in-react-1gjp
 https://dustinbrett.com/
 https://www.ignasimonreal.com/
-https://codesandbox.io/p/sandbox/crt-terminal-in-css-js-tlijm
+https://codesandbox.io/p/sandbox/crt-terminal-in-css-js-tlijm - This is the cohesive fallout one
 https://css-tricks.com/old-timey-terminal-styling/
 https://codepen.io/jcubic/pen/BwBYOZ
 inspo: https://dev.to/cbms26/how-i-built-a-retro-terminal-panel-in-react-1gjp
@@ -38,6 +38,8 @@ Desktop Icon
 https://www.freepik.com/premium-vector/pixel-art-illustration-monitor-pixelated-monitor-computer-monitor-laptop-pixelated-game_95470877.htm
 https://www.vecteezy.com/vector-art/29817514-pixel-art-illustration-computer-pixelated-old-computer-old-classic-computer-icon-pixelated-for-the-pixel-art-game-and-icon-for-website-and-video-game-old-school-retro
 https://www.freepik.com/icon/face-scan_727392
+Dungeon game icon - https://www.flaticon.com/authors/xnimrodx
+'<a href="https://www.flaticon.com/free-icons/retro" title="retro icons">Retro icons created by xnimrodx - Flaticon</a>'
 
 
 

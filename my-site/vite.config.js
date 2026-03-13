@@ -25,6 +25,14 @@ export default defineConfig({
   },
   build: {
     sourcemap: false, // disable in production unless you need them
-    // rollupOptions: { /* add custom rollup options if required */ },
+    rollupOptions: {
+      input: {
+        // ── ADDED: tell Vite about both HTML entry points ──
+        // 'main' = your existing app  →  served at /
+        // 'portfolio' = React Bits    →  served at /portfolio
+        main:      path.resolve(__dirname, 'index.html'),
+        portfolio: path.resolve(__dirname, 'portfolio.html'),
+      },
+    },
   },
 })

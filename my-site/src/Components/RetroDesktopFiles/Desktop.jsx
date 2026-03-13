@@ -17,7 +17,7 @@
 
 
 
-
+import './crt.css';
 
 import React, { useEffect, useState, useRef, createRef, Suspense } from 'react';
 import { DEFAULT_APPS, DesktopIcon } from './DesktopIcon';
@@ -26,6 +26,8 @@ import ErrorBoundary from './ErrorBoundary';
 import BackgroundPicker from './DesktopApps/BackgroundPicker';
 
 import RetroTerminal from './DesktopApps/RetroTerminal';
+import DungeonRaycaster from './DesktopApps/DungeonGame';
+import AppWindow from './AppWindow';
 
 
 
@@ -34,6 +36,7 @@ import AboutTemplate from '../SiteExamples/AboutTemplate';
 import BlogTemplate from '../SiteExamples/BlogTemplate';
 
 import MinimalApple, {CleanLanding, GlassLanding} from '../SiteExamples/LandingPages';
+import PortfolioLauncher from './DesktopApps/PortfolioLauncher';
 
 
 
@@ -61,6 +64,9 @@ function saveState(state) {
     console.warn('Failed to save desktop state', e);
   }
 }
+
+
+
 
 export default function RetroDesktop() {
   const [apps, setApps] = useState(() => {
@@ -128,7 +134,8 @@ useEffect(() => {
     switch (id) {
       case 'portfolio':
               return (
-                <SiteExamples openApp={openApp} />
+                //<SiteExamples openApp={openApp} />
+                <PortfolioLauncher/>
               );
       case 'about':
               return (
@@ -153,10 +160,13 @@ useEffect(() => {
               );
 
         case 'background':
+           
                 return (
                   <BackgroundPicker
+                  key={String(id.open)}
                     current={desktopBg}
-                    onApply={(sel) => setDesktopBg(sel)}
+                    onApply={(sel) => {console.log('BackgroundPicker sel:', sel); 
+                      setDesktopBg(sel);}}
                     onClose={() => closeApp('background')}
                   />
                 );
@@ -183,6 +193,10 @@ useEffect(() => {
           return( <RetroTerminal  />
          
           );
+
+          case 'dungeonGame':
+            return( 
+            <DungeonRaycaster /> );
 
         //BELOW--------- For site example dynamic opening. Should be restructured into seperate case loop
         case 'minimalApple':
@@ -273,15 +287,15 @@ if (desktopBg && desktopBg.type === 'gradient' && desktopBg.css) {
 
 
   return (
-    <div className="w-full h-screen relative select-none overflow-hidden font-sans">
+    <div className="w-full h-screen relative select-none overflow-hidden font-sans crt-curve">
 
       {/* Background: CRT vibe */}
       <div className="absolute inset-0" style={{ ...baseBgStyle }} />
 
 
 
-      {/* scanlines + vignette overlay */}
-      <div className="pointer-events-none absolute inset-0 " /*mix-blend-screen*/> 
+      {/* scanlines + vignette overlay 
+      <div className="pointer-events-none absolute inset-0 " /*mix-blend-screen
         <div className="absolute inset-0 opacity-20" style={{
           backgroundImage: 'repeating-linear-gradient(180deg, rgba(255,255,255,0.10) 0px, rgba(255,255,255,0.10) 1px, transparent 1px, transparent 3px)'
         }} />
@@ -289,9 +303,12 @@ if (desktopBg && desktopBg.type === 'gradient' && desktopBg.css) {
          // boxShadow: 'inset 0 125px 125px rgba(0,0,0,0.25)'
         }} />
       </div>
+      */}
+
+      <div className="crt-overlay" /> 
 
       {/* Desktop Content Area */}
-      <div className="absolute inset-0 p-6">
+      <div className="absolute inset-0 p-6" >
         {/* Icons (moved to desktopIcons.jsx) */}
         {apps.filter(app => !app.hidden).map(app => (
           <DesktopIcon
@@ -301,6 +318,9 @@ if (desktopBg && desktopBg.type === 'gradient' && desktopBg.css) {
             onDragStop={(id, data) => onIconDrag(id, data)}
           />
         ))}
+
+ 
+
 
         {/* Open windows */}
        {apps.filter(a => a.open).map(app => (
@@ -312,10 +332,10 @@ if (desktopBg && desktopBg.type === 'gradient' && desktopBg.css) {
     onMinimize={() => toggleMinimize(app.id)}
     zIndex={app.z}
   >
-    
-    <ErrorBoundary onReset={() => closeApp(app.id)}> {/* ErrorBoundary contains any issues when starting/clicking on a new App/Project */}
+   <ErrorBoundary onReset={() => closeApp(app.id)}> {/* ErrorBoundary contains any issues when starting/clicking on a new App/Project */}
       <AppContent id={app.id} />
     </ErrorBoundary> 
+    
   </AppWindow>
 ))}
 
@@ -384,7 +404,7 @@ if (desktopBg && desktopBg.type === 'gradient' && desktopBg.css) {
   );
 }
 
-
+/*
 
 // ---------- Window Component ----------
 function AppWindow({ app, children, bringToFront, onClose, onMinimize, zIndex }) {
@@ -404,8 +424,9 @@ function AppWindow({ app, children, bringToFront, onClose, onMinimize, zIndex })
     >
       <div
         ref={nodeRef}
-        style={{ zIndex: zIndex || 1, resize: 'both', overflow: 'hidden' }}
-       // className="absolute w-[520px] max-w-[90%] bg-[#08121b]/80 border border-white/8 rounded shadow-2xl"
+        style={{ zIndex: zIndex || 1, resize: 'both', overflow: 'hidden', minWidth: '200px', minHeight: '160px',
+           maxHeight: '90vh', maxWidth: '95vw', width: app.defaultWidth || undefined }}
+      
        className={`absolute w-[520px] max-w-[90%] rounded shadow-2xl transition-all duration-150
           ${app.z === zIndex 
             ? 'bg-[#08121b]/90 border border-cyan-400/40 shadow-[0_0_25px_rgba(0,255,200,0.15)]'
@@ -417,7 +438,7 @@ function AppWindow({ app, children, bringToFront, onClose, onMinimize, zIndex })
           role="toolbar"
         >
            <div className="flex items-center gap-2">
-            {/* Make these actual buttons, mark them .no-drag so react-draggable won't intercept clicks */}
+            {/* Make these actual buttons, mark them .no-drag so react-draggable won't intercept clicks }
             <button
               type="button"
               className="no-drag w-3 h-3 rounded-full bg-red-500"
@@ -443,7 +464,7 @@ function AppWindow({ app, children, bringToFront, onClose, onMinimize, zIndex })
           </div>
 
           <div className="flex items-center gap-2">
-            {/* Keep the existing minimize/close textual buttons too; mark them no-drag */}
+            {/* Keep the existing minimize/close textual buttons too; mark them no-drag }
             <button
               onClick={(e) => { e.stopPropagation(); onMinimize(); }}
               className="no-drag px-2 py-1 text-xs font-mono"
@@ -463,7 +484,7 @@ function AppWindow({ app, children, bringToFront, onClose, onMinimize, zIndex })
         </div>
 
         <div className="p-0 text-white/95">
-          <div className="bg-gradient-to-b from-black/50 to-black/70 backdrop-blur-[2px] p-2" style={{ minHeight: "160px" }}>
+          <div className="bg-gradient-to-b from-black/50 to-black/70 backdrop-blur-[2px] p-2 overflow-auto flex-1" style={{ minHeight: "0" }}>
             {children}
           </div>
         </div>
@@ -471,7 +492,7 @@ function AppWindow({ app, children, bringToFront, onClose, onMinimize, zIndex })
     </Draggable>
   );
 }
-
+*/
 
 
 

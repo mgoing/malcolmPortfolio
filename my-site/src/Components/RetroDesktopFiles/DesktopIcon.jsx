@@ -7,22 +7,32 @@ import faceScan from '../../assets/faceScanFT.png';
 import backgroundSelector from '../../assets/backgroundSelector.jpg';
 import Fo4Terminal from '../../assets/retroTerminal.jpg';
 import alertSiteDetails from '../../assets/alertSiteDetails.png';
+import gameConsole from '../../assets/game-console.png';
+import projectManagement from '../../assets/desktopIcons/project-management.png';
+import webDevelopment from '../../assets/desktopIcons/web-development.png';
+import faceID from '../../assets/desktopIcons/face-id.png';
 
 
 
 
 // App registry: add or reorder entries here. Keep `id` unique.
 export const DEFAULT_APPS = [
-{ id: 'portfolio', title: 'Web Design', icon: '📁', defaultPos: { x: 260, y: 180 }, navUrl: '/landing.html'},
+    //first row of apps
+{ id: 'background', title: 'Background Settings', icon: backgroundSelector, defaultHeight: '480px', defaultPos:{x: 60, y: 80}},
 { id: 'about', title: 'About', icon: '📝', defaultPos: { x: 160, y: 80 } },
 { id: 'retroTerminal', title: 'Terminal', icon: '💻', defaultPos: { x: 260, y: 80 } },
-{ id: 'projects', title: 'Projects', icon: '💾', defaultPos: { x: 360, y: 80 } },
-
+{ id: 'projects', title: 'Projects', icon: projectManagement, defaultPos: { x: 360, y: 80 } },
 { id: 'bubblePop', title: 'Bubble Pop', icon: bubblePNG , defaultPos: { x: 460, y: 80 } },
-{ id: 'background', title: 'Background Settings', icon: backgroundSelector, defaultPos:{x: 60, y: 80}},
-{ id: 'faceTracker', title: 'FaceTracker Thesis', icon: faceScan, defaultPos: {x: 60, y: 180}},
+
+
+//info off to the side
+{ id: 'info', title: 'Site Info', icon: alertSiteDetails, defaultPos: {x: 1000, y: 80}}, 
+
+//second row of apps
+{ id: 'faceTracker', title: 'FaceTracker Thesis', icon: faceID, defaultPos: {x: 60, y: 180}},
 { id: 'foTerminal', title: 'FO Terminal', icon: Fo4Terminal, defaultPos: {x: 160, y: 180}},
-{ id: 'info', title: 'Site Info', icon: alertSiteDetails, defaultPos: {x: 1000, y: 80}},  
+{ id: 'portfolio', title: 'Web Design', icon: webDevelopment, defaultPos: { x: 260, y: 180 }, navUrl: '/landing.html'},
+{ id: 'dungeonGame', title: 'Dungeon Game', icon: gameConsole, defaultPos: {x: 360, y: 180 }, defaultWidth: '820px' },
 
 //hidden apps not in desktop
 {  id: 'minimalApple', title: 'Minimal Apple', hidden: true},
