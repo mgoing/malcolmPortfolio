@@ -24,14 +24,15 @@ export default defineConfig({
     exclude: ['react-native', 'react-native-web', '@react-native/normalize-colors']
   },
   build: {
-    sourcemap: false, // disable in production unless you need them
+    sourcemap: false, // disable in production 
     rollupOptions: {
       input: {
-        // ── ADDED: tell Vite about both HTML entry points ──
-        // 'main' = your existing app  →  served at /
-        // 'portfolio' = React Bits    →  served at /portfolio
+        // Add new html here.
+        //Main is the retroDesktop and served through main.jsx and app.jsx
+        //
         main:      path.resolve(__dirname, 'index.html'),
         portfolio: path.resolve(__dirname, 'portfolio.html'),
+         showcase:  path.resolve(__dirname, 'showcase.html'),
       },
     },
   },

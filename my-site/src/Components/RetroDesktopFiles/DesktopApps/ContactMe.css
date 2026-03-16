@@ -1,0 +1,188 @@
+/* ============================================================
+   CONTACT FORM
+   Centered, dark, retro-terminal aesthetic.
+   White text on near-black card. Acid-green accents.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+
+.contact-wrap {
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background: transparent;
+}
+
+/* Card */
+.contact-card {
+  width: 100%;
+  max-width: 480px;
+  background: #0a0a0a;
+  border: 1px solid #1e2e00;
+  padding: 2rem 2rem 1.75rem;
+  font-family: 'Space Mono', 'Courier New', monospace;
+  color: #ffffff;
+
+  /* Scanline texture */
+  background-image: repeating-linear-gradient(
+    180deg,
+    transparent 0px,
+    transparent 3px,
+    rgba(200, 255, 0, 0.015) 3px,
+    rgba(200, 255, 0, 0.015) 4px
+  );
+
+  box-shadow:
+    0 0 0 1px rgba(200, 255, 0, 0.08),
+    0 8px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* Header */
+.contact-header {
+  text-align: center;
+  margin-bottom: 1.75rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid #1e2e00;
+}
+.contact-header__icon {
+  display: block;
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+  color: #98ff70;
+}
+.contact-header__title {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #ffffff;
+  margin: 0 0 0.4rem;
+}
+.contact-header__sub {
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1.5;
+}
+
+/* Fields */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.contact-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.contact-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(153, 255, 110, 0.7);
+}
+
+.contact-input {
+  background: #050505;
+  border: 1px solid #1e2e00;
+  color: #ffffff;
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 0.8rem;
+  padding: 0.65rem 0.85rem;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  caret-color: #98ff70;
+}
+.contact-input::placeholder {
+  color: rgba(255, 255, 255, 0.18);
+}
+.contact-input:focus {
+  border-color: #98ff70;
+  box-shadow: 0 0 0 2px rgba(153, 255, 110, 0.08);
+}
+
+.contact-textarea {
+  resize: vertical;
+  min-height: 110px;
+  line-height: 1.6;
+}
+
+/* hCaptcha widget — centered */
+.contact-captcha {
+  display: flex;
+  justify-content: center;
+  padding: 0.25rem 0;
+}
+
+/* Submit */
+.contact-submit {
+  width: 100%;
+  padding: 0.75rem;
+  background: transparent;
+  color: #98ff70;
+  border: 1px solid #98ff70;
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+
+  background-image: repeating-linear-gradient(
+    180deg,
+    transparent 0px,
+    transparent 2px,
+    rgba(200, 255, 0, 0.03) 2px,
+    rgba(200, 255, 0, 0.03) 4px
+  );
+  box-shadow: 0 0 12px rgba(153, 255, 110, 0.15);
+  animation: submitPulse 3s ease-in-out infinite;
+}
+.contact-submit:hover:not(:disabled) {
+  background: #98ff70;
+  background-image: none;
+  color: #000;
+  box-shadow: 0 0 24px rgba(153, 255, 110, 0.4);
+  animation: none;
+}
+.contact-submit:disabled,
+.contact-submit--loading {
+  opacity: 0.45;
+  cursor: not-allowed;
+  animation: none;
+}
+
+/* Result message */
+.contact-result {
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-align: center;
+  padding: 0.5rem;
+  margin-top: 0.25rem;
+}
+.contact-result--success {
+  color: #98ff70;
+  border: 1px solid rgba(153, 255, 110, 0.2);
+  background: rgba(200, 255, 0, 0.04);
+}
+.contact-result--error {
+  color: #ff6060;
+  border: 1px solid rgba(255, 96, 96, 0.2);
+  background: rgba(255, 96, 96, 0.04);
+}
+.contact-result--sending {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* Animations */
+@keyframes submitPulse {
+  0%,  100% { box-shadow: 0 0 10px rgba(153, 225, 110, 0.15); }
+  50%        { box-shadow: 0 0 22px rgba(153, 255, 110, 0.3);  }
+}

@@ -28,6 +28,7 @@ import BackgroundPicker from './DesktopApps/BackgroundPicker';
 import RetroTerminal from './DesktopApps/RetroTerminal';
 import DungeonRaycaster from './DesktopApps/DungeonGame';
 import AppWindow from './AppWindow';
+import StyleShowcase from '../BigExamplePages/src/pages/fiveStylePages/styleShowcase';
 
 
 
@@ -37,6 +38,8 @@ import BlogTemplate from '../SiteExamples/BlogTemplate';
 
 import MinimalApple, {CleanLanding, GlassLanding} from '../SiteExamples/LandingPages';
 import PortfolioLauncher from './DesktopApps/PortfolioLauncher';
+import ContactMe from './DesktopApps/ContactMe';
+import ResetApp from './DesktopApps/ResetApp';
 
 
 
@@ -158,6 +161,20 @@ useEffect(() => {
                     <BubblePopGame />
                   </Suspense>
               );
+        
+        case 'contactMe':{
+          return(
+            <ContactMe/>
+          );
+
+        }
+
+        case 'reset':{
+              return(
+                  <ResetApp/>
+              );
+
+        }
 
         case 'background':
            
@@ -183,8 +200,14 @@ useEffect(() => {
 
         case 'info':
                 return (
-                  <div className="p-3 text-sm">Welcome! This ongoing project serves as a location to showcase projects and test React features. This site was designed to emulate a desktop experience, within your browser. This static site is fully custom built and designed by myself and hosted through Github.
-                    
+                  <div className="p-3 text-sm text-white">Welcome! This ongoing project serves as a location to showcase projects and test React features. This site was designed to emulate a desktop experience, within your browser. This static site is fully custom built and designed by myself and hosted through Github.
+                    <p>
+                      This site does not collect any personal data. The site does use "cookies" to remember desktop settings. (position of apps, background, etc.) I cannot access this data and it remains on your browser and computer. 
+                    </p>
+                   
+                    <p>
+                      Please explore and test the various apps. Change the background, learn about my projects and uncover secret areas. Select the "[?]" on the top right to learn more about each app.
+                    </p>
                   
                   </div>
                 );
@@ -197,6 +220,11 @@ useEffect(() => {
           case 'dungeonGame':
             return( 
             <DungeonRaycaster /> );
+
+            case 'styleShowcase':
+              return(
+                <StyleShowcase/>
+              );
 
         //BELOW--------- For site example dynamic opening. Should be restructured into seperate case loop
         case 'minimalApple':

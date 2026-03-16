@@ -1,0 +1,355 @@
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;0,6..96,900;1,6..96,400&family=Jost:wght@200;300;400&display=swap');
+
+.lux { all: initial; display: block; }
+.lux *, .lux *::before, .lux *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+.lux {
+  font-family: 'Jost', sans-serif;
+  background: #080808;
+  color: #e8e0d0;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Nav */
+.lux__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 3rem;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(8,8,8,0.9);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(232,224,208,0.08);
+}
+.lux__logo {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 1rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #e8e0d0;
+}
+.lux__nav-left, .lux__nav-right {
+  display: flex;
+  gap: 2.5rem;
+}
+.lux__nav-link {
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(232,224,208,0.5);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.lux__nav-link:hover { color: #e8e0d0; }
+
+/* Hero */
+.lux__hero {
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 5% 6rem;
+  overflow: hidden;
+}
+.lux__hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 70% 30%, rgba(200,180,120,0.06), transparent 50%),
+    linear-gradient(160deg, #100e08 0%, #080808 60%);
+}
+/* Thin vertical gold line decoration */
+.lux__hero-bg::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  right: 30%;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, rgba(200,180,120,0.3) 30%, rgba(200,180,120,0.3) 70%, transparent);
+}
+.lux__hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+}
+.lux__hero-eyebrow {
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(200,180,120,0.7);
+  margin-bottom: 2rem;
+}
+.lux__hero-name {
+  font-family: 'Bodoni Moda', serif;
+  font-size: clamp(4rem, 11vw, 10rem);
+  font-weight: 400;
+  line-height: 0.88;
+  color: #e8e0d0;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+  letter-spacing: -0.01em;
+}
+.lux__hero-name-word {
+  display: block;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 1s, transform 1s;
+}
+.lux__hero-name-word:nth-child(even) {
+  font-style: italic;
+  padding-left: 4rem;
+  color: rgba(200,180,120,0.8);
+}
+.lux--in .lux__hero-name-word { opacity: 1; transform: translateY(0); }
+
+.lux__hero-divider {
+  width: 60px;
+  height: 1px;
+  background: rgba(200,180,120,0.5);
+  margin: 0 0 1.5rem;
+}
+.lux__hero-tagline {
+  font-size: 1rem;
+  font-weight: 200;
+  line-height: 1.7;
+  color: rgba(232,224,208,0.55);
+  max-width: 420px;
+  margin-bottom: 1.25rem;
+  letter-spacing: 0.02em;
+}
+.lux__hero-avail {
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  color: rgba(200,180,120,0.6);
+  text-transform: uppercase;
+}
+.lux__hero-index {
+  position: absolute;
+  right: 4%;
+  bottom: 6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  color: rgba(232,224,208,0.25);
+  writing-mode: vertical-rl;
+}
+.lux__hero-index-line {
+  width: 1px;
+  height: 80px;
+  background: rgba(232,224,208,0.15);
+}
+
+/* Bio */
+.lux__bio {
+  display: grid;
+  grid-template-columns: 140px 1fr 260px;
+  gap: 4rem;
+  padding: 7rem 5%;
+  border-top: 1px solid rgba(232,224,208,0.08);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.lux__bio-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.lux__label-num {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 1.2rem;
+  font-style: italic;
+  color: rgba(200,180,120,0.6);
+}
+.lux__label-text {
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(232,224,208,0.3);
+}
+.lux__bio-pull {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 1.5rem;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.4;
+  color: rgba(200,180,120,0.8);
+  margin-bottom: 1.5rem;
+}
+.lux__bio-body {
+  font-size: 0.88rem;
+  font-weight: 200;
+  line-height: 1.9;
+  color: rgba(232,224,208,0.5);
+  letter-spacing: 0.02em;
+}
+.lux__bio-skills {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-left: 1px solid rgba(232,224,208,0.08);
+  padding-left: 2rem;
+}
+.lux__bio-skill {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid rgba(232,224,208,0.06);
+  font-size: 0.8rem;
+  font-weight: 300;
+  color: rgba(232,224,208,0.5);
+  letter-spacing: 0.04em;
+  transition: color 0.2s;
+}
+.lux__bio-skill:hover { color: #e8e0d0; }
+.lux__bio-skill-num {
+  font-family: 'Bodoni Moda', serif;
+  font-style: italic;
+  color: rgba(200,180,120,0.3);
+  font-size: 0.75rem;
+  min-width: 24px;
+}
+
+/* Works */
+.lux__works {
+  padding: 0 5% 7rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.lux__works-header {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 4rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(232,224,208,0.08);
+}
+.lux__works-title {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 1.8rem;
+  font-weight: 400;
+  font-style: italic;
+  color: #e8e0d0;
+}
+.lux__works-rule {
+  flex: 1;
+  height: 1px;
+  background: rgba(232,224,208,0.08);
+}
+.lux__work {
+  display: grid;
+  grid-template-columns: 60px 340px 1fr;
+  gap: 3rem;
+  align-items: center;
+  padding: 3rem 0;
+  border-bottom: 1px solid rgba(232,224,208,0.06);
+  transition: background 0.3s;
+}
+.lux__work--alt { direction: rtl; }
+.lux__work--alt > * { direction: ltr; }
+.lux__work:hover { background: rgba(232,224,208,0.02); }
+
+.lux__work-num {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 0.75rem;
+  font-style: italic;
+  color: rgba(200,180,120,0.3);
+  letter-spacing: 0.1em;
+}
+.lux__work-visual {
+  height: 220px;
+  position: relative;
+  overflow: hidden;
+}
+.lux__work-visual-line {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  opacity: 0.4;
+}
+.lux__work-meta {
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(200,180,120,0.5);
+  margin-bottom: 0.75rem;
+}
+.lux__work-title {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 2.5rem;
+  font-weight: 400;
+  line-height: 1;
+  color: #e8e0d0;
+  margin-bottom: 1rem;
+}
+.lux__work-desc {
+  font-size: 0.85rem;
+  font-weight: 200;
+  line-height: 1.8;
+  color: rgba(232,224,208,0.4);
+  margin-bottom: 1.25rem;
+  max-width: 360px;
+}
+.lux__work-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.lux__work-tag {
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.7rem;
+  border: 1px solid rgba(200,180,120,0.2);
+  color: rgba(200,180,120,0.5);
+}
+
+/* Contact */
+.lux__contact {
+  padding: 8rem 5%;
+  text-align: center;
+  border-top: 1px solid rgba(232,224,208,0.06);
+  background: linear-gradient(180deg, transparent, rgba(200,180,120,0.04));
+}
+.lux__contact-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(200,180,120,0.4);
+  margin-bottom: 2rem;
+}
+.lux__contact-head {
+  font-family: 'Bodoni Moda', serif;
+  font-size: clamp(2.5rem, 7vw, 6rem);
+  font-weight: 400;
+  font-style: italic;
+  color: #e8e0d0;
+  margin-bottom: 2rem;
+  line-height: 1.05;
+}
+.lux__contact-link {
+  font-size: 0.88rem;
+  font-weight: 200;
+  letter-spacing: 0.08em;
+  color: rgba(200,180,120,0.7);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(200,180,120,0.2);
+  padding-bottom: 0.1rem;
+  transition: color 0.2s, border-color 0.2s;
+}
+.lux__contact-link:hover { color: rgba(200,180,120,1); border-color: rgba(200,180,120,0.6); }
+
+/* Scroll reveal */
+.lux--watch { opacity: 0; transform: translateY(30px); transition: opacity 1s ease, transform 1s ease; }
+.lux--in    { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 900px) {
+  .lux__bio { grid-template-columns: 1fr; gap: 2rem; }
+  .lux__bio-skills { border-left: none; border-top: 1px solid rgba(232,224,208,0.08); padding-left: 0; padding-top: 1.5rem; }
+  .lux__work { grid-template-columns: 1fr; gap: 1.5rem; }
+  .lux__work--alt { direction: ltr; }
+  .lux__nav-left, .lux__nav-right { display: none; }
+}

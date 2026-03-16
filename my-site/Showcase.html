@@ -1,7 +1,7 @@
-  <!--Main for retroDesktop -->
+<!--Main for showcase. Paired with Main-portfolio/App-portfolio.jsx -->
+<!-- For future pages, copy below, add new vite config route, new App-portfolio case, Portfolio destination array-->
 <!doctype html>
 <html lang="en">
-
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,16 +9,11 @@
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
-    <title>Malcolm Going OS</title>
+    <title>Malcolm Going — Style Showcase</title>
   </head>
   <body>
-
-     <div id="preloader" aria-hidden="true"></div>
-    <!-- Canvas/intro can live here later; for now we mount React root -->
     <div id="root"></div>
-
-    <!-- Vite entry (dev / build friendly) -->
-    <script type="module" src="/src/main.jsx"></script>
-   
+    <!-- Same entry point as portfolio.html — path switch handles the rest -->
+    <script type="module" src="/src/main-portfolio.jsx"></script>
   </body>
 </html>
