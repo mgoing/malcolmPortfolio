@@ -10,13 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@gsap/react": "^2.1.2",
+    "@hcaptcha/react-hcaptcha": "^2.0.2",
     "bootstrap-icons": "^1.13.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "draggable": "^4.2.0",
+    "gsap": "^3.14.2",
     "ionicons": "^8.0.13",
     "lucide-react": "^0.546.0",
-    "motion": "^12.23.24",
+    "motion": "^12.36.0",
     "node": "^25.1.0",
     "ogl": "^1.0.11",
     "p5": "^2.1.1",

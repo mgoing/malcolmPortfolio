@@ -1,5 +1,4 @@
-// src/components/RetroDesktopFiles/BackgroundPicker.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // import images so bundler resolves them
 import crtGridImg from '../../../assets/crt-grid.png';
@@ -38,15 +37,21 @@ function presetColorsOrDefault(preset) {
 }
 
 export default function BackgroundPicker({ current, onApply, onClose }) {
-  // Normalize incoming current into the selection shape the component uses.
-  const normalizedDefault = (() => {
-    if (!current) {
-      const fallback = PRESETS.find(p => p.type === 'gradient') || PRESETS[2];
+  
+const [selection, setSelection] = useState(() => normalize(current));
+console.log('BackgroundPicker RENDER, selection:', selection);
+  
+
+// useEffect(() => {
+ //   setSelection(normalize(selection)); //was current instead of selection
+  //}, [selection]);
+
+
+  function normalize(c) {
+    if (!c) { const fallback = PRESETS.find(p => p.type === 'gradient') || PRESETS[2];
       const colors = presetColorsOrDefault(fallback);
-      return { type: 'gradient', colors, css: gradientCssFromColors(colors[0], colors[1]) };
-    }
-    if (current.type === 'gradient') {
-      // try to extract colors from css if available, otherwise use default gradient preset
+      return { type: 'gradient', colors, css: gradientCssFromColors(colors[0], colors[1]) };}
+    if (c.type === 'gradient') { // try to extract colors from css if available, otherwise use default gradient preset
       const colors = current.colors || [];
       if (colors.length >= 2) return { type: 'gradient', colors, css: gradientCssFromColors(colors[0], colors[1]) };
       if (typeof current.css === 'string') {
@@ -54,7 +59,25 @@ export default function BackgroundPicker({ current, onApply, onClose }) {
         if (match.length >= 2) return { type: 'gradient', colors: [match[0], match[1]], css: current.css };
         return { type: 'gradient', colors: presetColorsOrDefault(PRESETS[2]), css: current.css };
       }
-      return { type: 'gradient', colors: presetColorsOrDefault(PRESETS[2]), css: gradientCssFromColors(...presetColorsOrDefault(PRESETS[2])) };
+      return { type: 'gradient', colors: presetColorsOrDefault(PRESETS[2]), css: gradientCssFromColors(...presetColorsOrDefault(PRESETS[2])) }; 
+    }
+    if (c.type === 'solid') {
+      return { type: 'solid', color: current.color || '#00121a' };
+    }
+     if (c.type === 'preset-image') {
+      return { type: 'preset-image', src: current.src || '' };
+    }
+    return { type: 'gradient', colors: presetColorsOrDefault(PRESETS[2]), css: gradientCssFromColors(...presetColorsOrDefault(PRESETS[2])) };
+  
+  }
+
+  /*
+  const normalizedDefault = (() => {
+    if (!current) {
+      
+    }
+    if (current.type === 'gradient') {
+      
     }
     if (current.type === 'solid') {
       return { type: 'solid', color: current.color || '#00121a' };
@@ -64,22 +87,28 @@ export default function BackgroundPicker({ current, onApply, onClose }) {
     }
     return { type: 'gradient', colors: presetColorsOrDefault(PRESETS[2]), css: gradientCssFromColors(...presetColorsOrDefault(PRESETS[2])) };
   })();
+  */
 
-  const [selection, setSelection] = useState(normalizedDefault);
+  //const [selection, setSelection] = useState(normalizedDefault);
 
   function choosePreset(preset) {
+    console.log('preset in cP: ', preset);
+    console.log('BEFORE setSelection, current selection:', selection);
     if (!preset) return;
     if (preset.type === 'preset-image') {
       setSelection({ type: 'preset-image', src: preset.src || '' });
+      console.log('AFTER setSelection called (preset-image)', selection);
       return;
     }
     if (preset.type === 'gradient') {
       const colors = presetColorsOrDefault(preset);
       setSelection({ type: 'gradient', colors, css: gradientCssFromColors(colors[0], colors[1]) });
+      console.log('AFTER setSelection called (gradient)', selection);
       return;
     }
     if (preset.type === 'solid') {
       setSelection({ type: 'solid', color: preset.color || '#00121a' });
+      console.log('AFTER setSelection called (solid)', selection);
       return;
     }
   }
@@ -101,6 +130,15 @@ export default function BackgroundPicker({ current, onApply, onClose }) {
     setSelection({ type: 'solid', color: e.target.value });
   }
 
+  function pairClickPreset(preset){
+showButtonClick();
+choosePreset(preset);
+
+  }
+  function showButtonClick(){
+    console.log('clicked');
+  }
+
   function applySelection() {
     let payload;
     if (selection.type === 'gradient') {
@@ -112,6 +150,7 @@ export default function BackgroundPicker({ current, onApply, onClose }) {
     } else {
       payload = { type: 'preset-image', src: selection.src || '' };
     }
+    console.log('payload to onApply: ', payload);
     if (typeof onApply === 'function') onApply(payload);
     if (typeof onClose === 'function') onClose();
   }
@@ -134,17 +173,17 @@ export default function BackgroundPicker({ current, onApply, onClose }) {
   }
 
   return (
-    <div className="p-3 text-sm w-full h-full">
+    <div className="p-3 text-sm w-full h-full text-white">
       <h3 className="font-mono mb-2">Background</h3>
 
       <div className="mb-3">
-        <div className="font-mono text-xs mb-1">Presets</div>
+        <div className="font-mono text-xs mb-1 text-white">Presets</div>
         <div className="flex gap-2 flex-wrap">
           {PRESETS.map((p) => (
             <button
               key={p.key}
-              onClick={() => choosePreset(p)}
-              className="w-28 h-16 border rounded overflow-hidden text-xs p-1 no-drag"
+              onClick={() => pairClickPreset(p)}
+              className="w-28 h-16 border rounded overflow-hidden text-xs p-1 no-drag text-white"
               type="button"
             >
               {p.type === 'preset-image' ? (
@@ -154,7 +193,7 @@ export default function BackgroundPicker({ current, onApply, onClose }) {
               ) : (
                 <div style={{ background: p.color || '#000', width: '100%', height: '100%' }} />
               )}
-              <div className="text-center mt-1">{p.label}</div>
+              <div className="text-center mt-1 text-white">{p.label}</div>
             </button>
           ))}
         </div>
@@ -162,9 +201,9 @@ export default function BackgroundPicker({ current, onApply, onClose }) {
 
       {/* Gradient picker */}
       <div className="mb-3">
-        <div className="font-mono text-xs mb-1">Gradient (pick two colors)</div>
+        <div className="font-mono text-xs mb-1 text-white">Gradient (pick two colors)</div>
         <div className="flex items-center gap-3">
-          <label className="font-mono text-xs">Color A</label>
+          <label className="font-mono text-xs text-white">Color A</label>
           <input
             type="color"
             value={
@@ -174,7 +213,7 @@ export default function BackgroundPicker({ current, onApply, onClose }) {
             }
             onChange={(e) => handleGradientColorChange(0, e.target.value)}
           />
-          <label className="font-mono text-xs">Color B</label>
+          <label className="font-mono text-xs text-white">Color B</label>
           <input
             type="color"
             value={
@@ -189,7 +228,7 @@ export default function BackgroundPicker({ current, onApply, onClose }) {
 
       {/* Solid color */}
       <div className="mb-3">
-        <div className="font-mono text-xs mb-1">Solid color</div>
+        <div className="font-mono text-xs mb-1 text-white">Solid color</div>
         <input type="color" value={selection.type === 'solid' ? selection.color : '#00121a'} onChange={handleSolidChange} />
       </div>
 
@@ -203,7 +242,7 @@ export default function BackgroundPicker({ current, onApply, onClose }) {
       </div>
 
       <div className="mt-4">
-        <div className="font-mono text-xs mb-1">Preview</div>
+        <div className="font-mono text-xs mb-1 text-white">Preview</div>
         <div className="w-full h-36 border rounded overflow-hidden" style={previewStyle} />
       </div>
     </div>

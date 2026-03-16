@@ -1,0 +1,165 @@
+/* ============================================================
+   STYLE SHOWCASE SHELL + FLOATING SWITCHER
+   The switcher sits above everything, works on any background.
+   ============================================================ */
+
+.showcase {
+  position: relative;
+  min-height: 100vh;
+}
+
+/* Page fade transition */
+.showcase__page {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.showcase__page--in  { opacity: 1; transform: translateY(0); }
+.showcase__page--out { opacity: 0; transform: translateY(8px); pointer-events: none; }
+
+/* ── Switcher ─────────────────────────────────────────────── */
+.switcher {
+  position: fixed;
+  bottom: 1.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* The main pill */
+.switcher__pill {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 1.25rem 0.6rem 0.9rem;
+  background: rgba(10, 10, 14, 0.88);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 980px;
+  cursor: pointer;
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.85);
+  backdrop-filter: blur(20px);
+  box-shadow:
+    0 4px 24px rgba(0,0,0,0.4),
+    0 1px 0 rgba(255,255,255,0.06) inset;
+  transition: all 0.25s;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+.switcher__pill:hover {
+  background: rgba(20, 20, 30, 0.95);
+  border-color: rgba(255,255,255,0.22);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.08) inset;
+}
+.switcher--open .switcher__pill {
+  border-radius: 980px;
+  background: rgba(20,20,30,0.98);
+}
+
+/* Dots */
+.switcher__pill-dots {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.switcher__dot {
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  transition: all 0.3s;
+}
+.switcher__dot--active {
+  background: #c8ff00;
+  box-shadow: 0 0 6px rgba(200,255,0,0.6);
+}
+
+.switcher__pill-label {
+  flex: 1;
+}
+.switcher__pill-arrow {
+  font-size: 0.7rem;
+  opacity: 0.5;
+  transition: transform 0.25s;
+}
+.switcher--open .switcher__pill-arrow { transform: rotate(180deg); }
+
+/* Menu panel */
+.switcher__menu {
+  background: rgba(10,10,14,0.95);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 0.5rem;
+  backdrop-filter: blur(24px);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.6), 0 1px 0 rgba(255,255,255,0.06) inset;
+  min-width: 260px;
+  animation: menuSlideUp 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes menuSlideUp {
+  from { opacity: 0; transform: translateY(10px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.switcher__menu-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  padding: 0.5rem 0.75rem 0.25rem;
+}
+
+.switcher__option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.7rem 0.85rem;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s;
+  text-align: left;
+}
+.switcher__option:hover { background: rgba(255,255,255,0.07); }
+.switcher__option--active { background: rgba(200,255,0,0.08); }
+.switcher__option--active:hover { background: rgba(200,255,0,0.12); }
+
+.switcher__option-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 0.08em;
+  min-width: 20px;
+}
+.switcher__option-emoji {
+  font-size: 0.9rem;
+  line-height: 1;
+}
+.switcher__option-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.7);
+  flex: 1;
+  text-transform: uppercase;
+}
+.switcher__option--active .switcher__option-label { color: #c8ff00; }
+.switcher__option-check {
+  font-size: 0.7rem;
+  color: #c8ff00;
+}
+
+@media (max-width: 480px) {
+  .switcher { bottom: 1rem; left: 1rem; right: 1rem; transform: none; }
+  .switcher__pill { width: 100%; justify-content: center; }
+  .switcher__menu { min-width: unset; width: 100%; }
+}

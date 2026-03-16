@@ -1,0 +1,202 @@
+/* ============================================================
+   RESET APP
+   Retro terminal aesthetic — matches PortfolioLauncher palette.
+   ============================================================ */
+
+.reset-app {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  font-family: 'Space Mono', 'Courier New', monospace;
+  background: #0a0a0a;
+  color: #c8ff00;
+  height: 100%;
+  padding: 1.25rem;
+
+  background-image: repeating-linear-gradient(
+    180deg,
+    transparent 0px,
+    transparent 3px,
+    rgba(200, 255, 0, 0.012) 3px,
+    rgba(200, 255, 0, 0.012) 4px
+  );
+}
+
+/* Header */
+.reset-app__header {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 1rem;
+}
+.reset-app__icon {
+  font-size: 1.5rem;
+  color: #c8ff00;
+  line-height: 1;
+  animation: resetSpin 8s linear infinite;
+}
+@keyframes resetSpin {
+  to { transform: rotate(360deg); }
+}
+.reset-app__title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: #c8ff00;
+  margin: 0 0 0.2rem;
+}
+.reset-app__subtitle {
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  color: rgba(200, 255, 0, 0.45);
+  margin: 0;
+}
+
+/* Divider */
+.reset-app__divider {
+  height: 1px;
+  background: #1e2e00;
+  margin: 0.75rem 0;
+}
+
+/* Section label */
+.reset-app__section-label {
+  font-size: 0.58rem;
+  letter-spacing: 0.22em;
+  color: rgba(200, 255, 0, 0.35);
+  margin-bottom: 0.6rem;
+}
+
+/* Key list */
+.reset-app__key-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.reset-app__key-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid #111;
+  transition: background 0.15s;
+}
+.reset-app__key-item:last-child { border-bottom: none; }
+.reset-app__key-item--empty { opacity: 0.4; }
+
+.reset-app__key-icon {
+  font-size: 0.7rem;
+  color: #c8ff00;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+.reset-app__key-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  margin: 0 0 0.2rem;
+}
+.reset-app__key-desc {
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.35);
+  margin: 0;
+  line-height: 1.4;
+}
+.reset-app__key-status {
+  font-size: 0.55rem;
+  letter-spacing: 0.14em;
+  color: rgba(200, 255, 0, 0.25);
+  margin-left: auto;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+/* Actions */
+.reset-app__actions,
+.reset-app__confirm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 0.25rem;
+}
+.reset-app__warning {
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  color: rgba(255, 180, 0, 0.7);
+  line-height: 1.5;
+  margin: 0;
+}
+.reset-app__confirm-text {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.5;
+}
+.reset-app__confirm-btns {
+  display: flex;
+  gap: 0.6rem;
+}
+
+/* Buttons */
+.reset-app__btn {
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.6rem 1rem;
+  border: 1px solid;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+  flex: 1;
+}
+.reset-app__btn--danger {
+  background: transparent;
+  color: #ff4444;
+  border-color: #ff4444;
+}
+.reset-app__btn--danger:hover {
+  background: #ff4444;
+  color: #000;
+  box-shadow: 0 0 16px rgba(255, 68, 68, 0.4);
+}
+.reset-app__btn--ghost {
+  background: transparent;
+  color: rgba(200, 255, 0, 0.6);
+  border-color: #1e2e00;
+}
+.reset-app__btn--ghost:hover {
+  border-color: #c8ff00;
+  color: #c8ff00;
+}
+
+/* Wiping state */
+.reset-app__wiping {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.5rem 0;
+}
+.reset-app__wipe-icon {
+  font-size: 2rem;
+  color: #ff4444;
+  display: inline-block;
+  animation: resetSpin 0.6s linear infinite;
+}
+.reset-app__wipe-text {
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  color: #ff4444;
+  animation: wipeFlicker 0.4s linear infinite;
+}
+@keyframes wipeFlicker {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}

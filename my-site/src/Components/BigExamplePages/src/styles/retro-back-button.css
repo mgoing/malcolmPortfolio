@@ -1,0 +1,97 @@
+/* ============================================================
+   RETRO BACK BUTTON
+   Fixed bottom-left. Deliberately loud — matches RetroDesktop
+   CRT aesthetic, contrasts against the acid-dark RB pages.
+   ============================================================ */
+
+.retro-back-btn {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  padding: 0.55rem 1.1rem;
+  background: #000;
+  color: #c8ff00;
+  border: 2px solid #c8ff00;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+
+  /* Subtle scanline texture on the button itself */
+  background-image: repeating-linear-gradient(
+    180deg,
+    transparent 0px,
+    transparent 2px,
+    rgba(200, 255, 0, 0.03) 2px,
+    rgba(200, 255, 0, 0.03) 4px
+  );
+
+  /* Box glow */
+  box-shadow:
+    0 0 8px rgba(200, 255, 0, 0.35),
+    inset 0 0 8px rgba(200, 255, 0, 0.05);
+
+  transition:
+    background-color 0.15s,
+    color 0.15s,
+    box-shadow 0.15s,
+    transform 0.1s;
+
+  /* Slow phosphor pulse so it's always noticeable */
+  animation: retro-btn-pulse 3s ease-in-out infinite;
+}
+
+.retro-back-btn:hover {
+  background-color: #c8ff00;
+  color: #000;
+  background-image: none;
+  box-shadow:
+    0 0 18px rgba(200, 255, 0, 0.7),
+    0 0 40px rgba(200, 255, 0, 0.3);
+  transform: translate(-2px, -2px);
+}
+
+.retro-back-btn:active {
+  transform: translate(0, 0);
+  box-shadow: 0 0 6px rgba(200, 255, 0, 0.4);
+}
+
+.retro-back-btn__icon {
+  font-size: 0.65rem;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+.retro-back-btn:hover .retro-back-btn__icon {
+  opacity: 1;
+}
+
+.retro-back-btn__label {
+  /* Slight CRT flicker on the text */
+  animation: retro-label-flicker 6s linear infinite;
+}
+
+/* ── Animations ── */
+@keyframes retro-btn-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 8px rgba(200, 255, 0, 0.35),
+      inset 0 0 8px rgba(200, 255, 0, 0.05);
+  }
+  50% {
+    box-shadow:
+      0 0 16px rgba(200, 255, 0, 0.55),
+      inset 0 0 12px rgba(200, 255, 0, 0.08);
+  }
+}
+
+@keyframes retro-label-flicker {
+  0%, 94%, 96%, 98%, 100% { opacity: 1; }
+  95%, 97%                 { opacity: 0.6; }
+}
