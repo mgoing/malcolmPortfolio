@@ -32,7 +32,7 @@ export default defineConfig({
         //
         main:      path.resolve(__dirname, 'index.html'),
         portfolio: path.resolve(__dirname, 'portfolio.html'),
-         showcase:  path.resolve(__dirname, 'showcase.html'),
+         showcase:  path.resolve(__dirname, 'Showcase.html'),
       },
     },
   },
