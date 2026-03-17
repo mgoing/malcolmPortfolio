@@ -32,7 +32,7 @@ export const DEFAULT_APPS = [
 //second row of apps
 { id: 'faceTracker', title: 'FaceTracker Thesis', icon: faceID, defaultPos: {x: 60, y: 180}},
 { id: 'foTerminal', title: 'FO Terminal', icon: Fo4Terminal, defaultPos: {x: 160, y: 180}},
-{ id: 'portfolio', title: 'Web Design', icon: webDevelopment, defaultPos: { x: 260, y: 180 }, navUrl: '/landing.html'},
+{ id: 'portfolio', title: 'Web Design', icon: '📝', defaultPos: { x: 260, y: 180 }, navUrl: '/landing.html'}, //was webDevelopment 
 { id: 'dungeonGame', title: 'Dungeon Game', icon: gameConsole, defaultPos: {x: 360, y: 180 }, defaultWidth: '820px' },
 {id: 'styleShowcase', title: 'Style Guide', icon: '📝', defaultPos: {x: 460, y: 180 }, defaultHeight: '480px', defaultWidth: '820px'},
 {id: 'contactMe', title: "Contact Me", icon: '📝', defaultPos: {x: 560, y: 180},},
