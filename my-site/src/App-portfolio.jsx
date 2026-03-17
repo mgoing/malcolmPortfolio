@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Nav from "./components/BigExamplePages/src/components/nav";
+import Nav from "./Components/BigExamplePages/src/components/nav";
 import HomePage from "./Components/BigExamplePages/src/pages/homepage";
 import WorkPage from "./Components/BigExamplePages/src/pages/workpage";
 import AboutPage from "./Components/BigExamplePages/src/pages/aboutpage";
