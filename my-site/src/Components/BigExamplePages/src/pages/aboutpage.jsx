@@ -35,7 +35,7 @@
 //https://www.pexels.com/photo/professional-black-and-white-portrait-headshot-30767565/
 //https://www.pexels.com/photo/professional-headshot-of-confident-female-in-greenville-30004323/
 
-import "./AboutPage.css";
+import "./aboutPage.css";
 import ProfileCard from "../components/reactbits/ProfileCard";
 import Ribbons from "../components/reactbits/Ribbons";
 import ShinyText from "../components/reactbits/ShinyText";

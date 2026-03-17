@@ -16,7 +16,7 @@
  * ─────────────────────────────────────────────────────────────
  */
 
-import "./HomePage.css";
+import "./homePage.css";
 
 import Aurora       from "../components/reactbits/Aurora";
 import BlurText     from "../components/reactbits/BlurText";
