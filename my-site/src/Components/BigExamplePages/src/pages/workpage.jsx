@@ -26,7 +26,7 @@
  */
 
 import { useState } from "react";
-import "./workPage.css";
+import "./workpage.css";
 import CircularText from "../components/reactbits/CircularText";
 import Magnet from "../components/reactbits/Magnet";
 import PixelTransition from '../components/reactbits/PixelTransition';
