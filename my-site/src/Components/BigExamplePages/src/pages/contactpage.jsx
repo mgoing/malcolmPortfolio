@@ -28,7 +28,7 @@
  */
 
 import { useState, useRef } from "react";
-import "./ContactPage.css";
+import "./contactPage.css";
 import DecryptedText from "../components/reactbits/DecryptedText";
 import StarBorder from "../components/reactbits/StarBorder";
 import FadeContent from "../components/reactbits/FadeContent";
