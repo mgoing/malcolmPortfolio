@@ -8,7 +8,7 @@ import "./Components/BigExamplePages/src/styles/globals.css";
 import "./Components/BigExamplePages/src/styles/retro-back-button.css";
 
 
-import StyleShowcase from "./Components/BigExamplePages/src/pages/fiveStylePages/styleShowcase";
+//import StyleShowcase from "./Components/BigExamplePages/src/pages/fiveStylePages/StyleShowcase";
 
 
   const path = window.location.pathname.replace(/\/$/, '') || '/';
