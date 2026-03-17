@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import "./Nav.css";
+import "./nav.css";
 
 const links = [
   { id: "home",    label: "Index" },
