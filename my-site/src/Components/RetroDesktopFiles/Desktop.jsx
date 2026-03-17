@@ -28,7 +28,7 @@ import BackgroundPicker from './DesktopApps/BackgroundPicker';
 import RetroTerminal from './DesktopApps/RetroTerminal';
 import DungeonRaycaster from './DesktopApps/DungeonGame';
 import AppWindow from './AppWindow';
-import StyleShowcase from '../BigExamplePages/src/pages/fiveStylePages/styleShowcase';
+import StyleShowcase from '../BigExamplePages/src/pages/fiveStylePages/StyleShowcase';
 
 
 
