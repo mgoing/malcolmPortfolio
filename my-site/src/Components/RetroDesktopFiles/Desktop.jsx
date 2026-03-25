@@ -1,14 +1,5 @@
 
 
-//TODO Interactive mouse to make cool
-//TODO change background
-//TODO about bio
-//TODO determine the parts of the FaceTracker I can post
-
-//TODO make more retro
-//TODO add terminal
-//TODO wire in the user data that is collected
-//TODO add dungeon game
 
 //TODO connect certain API data 
 //inspo: https://dev.to/cbms26/how-i-built-a-retro-terminal-panel-in-react-1gjp
@@ -41,12 +32,16 @@ import PortfolioLauncher from './DesktopApps/PortfolioLauncher';
 import ContactMe from './DesktopApps/ContactMe';
 import ResetApp from './DesktopApps/ResetApp';
 
+import GuideOverlay from './DesktopApps/GuideOverlay';
+import { GUIDE_STEPS, GUIDE_TOTAL } from './DesktopApps/GuideSteps';
+
 
 
 
 const BubblePopGame = React.lazy(() => import('./DesktopApps/BubblePop'));
 const STORAGE_KEY = 'retro_desktop_state_v1';
 const BG_STORAGE_KEY = 'retro_desktop_bg_v1';
+const SITE_GUIDE_KEY = 'seenSiteGuide';
 
 
 
@@ -71,7 +66,7 @@ function saveState(state) {
 
 
 
-export default function RetroDesktop() {
+export default function RetroDesktop({siteGuide}) {
   const [apps, setApps] = useState(() => {
     const saved = loadState();
     if (saved && saved.apps) return saved.apps;
@@ -99,6 +94,15 @@ useEffect(() => {
     saveState({ apps, zCounter });
   }, [apps, zCounter]);
 
+// -1  = guide already completed / skipped
+  //  0+ = active step index into GUIDE_STEPS
+  const [guideStep, setGuideStep] = useState(() => {
+    // siteGuide is the value the parent read from localStorage.
+    // 'false' (string) means the user hasn't completed the guide.
+    return siteGuide === 'false' ? 0 : -1;
+  });
+
+
   // move icon handler — updates saved pos
   function onIconDrag(appId, data) {
     const { x, y } = data;
@@ -120,7 +124,10 @@ useEffect(() => {
       : a
     ));
     setZCounter(zCounter + 1);
+     handleGuideAction('open-app', appId);
   }
+  
+
   
   function closeApp(appId) {
     setApps(prev => prev.map(a => a.id === appId ? { ...a, open: false, minimized: false, launched: false} : a));
@@ -129,6 +136,40 @@ useEffect(() => {
     setApps(prev => prev.map(a => 
       a.id === appId ? { ...a, minimized: !a.minimized, open: !a.minimized || a.open  } : a));
   }
+
+// Called from openApp (above), AppWindow buttons, and taskbar.
+  // Checks whether the fired action matches the current step's
+  // expected type + appId, and if so advances guideStep.
+  function handleGuideAction(type, appId) {
+    setGuideStep(prev => {
+      if (prev < 0 || prev >= GUIDE_TOTAL) return prev;
+      const step = GUIDE_STEPS[prev];
+      if (step.type === type && step.appId === appId) {
+        const next = prev + 1;
+        if (next >= GUIDE_TOTAL) {
+          // Guide complete — write to localStorage
+          localStorage.setItem(SITE_GUIDE_KEY, 'true');
+        }
+        return next;
+      }
+      return prev;
+    });
+  }
+
+  function handleGuideSkip() {
+    localStorage.setItem(SITE_GUIDE_KEY, 'true');
+    setGuideStep(-1);
+  }
+
+  // GuideOverlay calls this for steps it detects internally
+  // (scroll and resize listeners live inside GuideOverlay).
+  function handleGuideAdvance() {
+    handleGuideAction(
+      GUIDE_STEPS[guideStep]?.type,
+      GUIDE_STEPS[guideStep]?.appId
+    );
+  }
+
 
   // render app contents by id — Add New Projects
   //by "id" from DesktopIcon.jsx
@@ -219,7 +260,9 @@ useEffect(() => {
 
           case 'dungeonGame':
             return( 
-            <DungeonRaycaster /> );
+              <Suspense fallback={<div className="p-3"> Loading Game...</div>}>
+            <DungeonRaycaster />
+            </Suspense> );
 
             case 'styleShowcase':
               return(
@@ -359,6 +402,7 @@ if (desktopBg && desktopBg.type === 'gradient' && desktopBg.css) {
     onClose={() => closeApp(app.id)}
     onMinimize={() => toggleMinimize(app.id)}
     zIndex={app.z}
+    onGuideAction={handleGuideAction}
   >
    <ErrorBoundary onReset={() => closeApp(app.id)}> {/* ErrorBoundary contains any issues when starting/clicking on a new App/Project */}
       <AppContent id={app.id} />
@@ -376,6 +420,7 @@ if (desktopBg && desktopBg.type === 'gradient' && desktopBg.css) {
              {apps.filter(a => a.launched).map(a => (
                      <button
                           key={`tb-${a.id}`}
+                          data-guide={`taskbar-${a.id}`}
                           onClick={() => {
                               if (!a.open) {
                              // Re-open if closed
@@ -386,6 +431,7 @@ if (desktopBg && desktopBg.type === 'gradient' && desktopBg.css) {
                                   prev.map(x => x.id === a.id
                                     ? { ...x, minimized: false, open: true, z: zCounter + 1 }    : x));
                                           setZCounter(z => z + 1);
+                                          handleGuideAction('taskbar', a.id);
                                             } else {
                                                 // Minimize if currently open
                                               toggleMinimize(a.id);
@@ -428,6 +474,14 @@ if (desktopBg && desktopBg.type === 'gradient' && desktopBg.css) {
                   ))}
                 </div>
                   </div>
+
+                   {guideStep >= 0 && (
+        <GuideOverlay
+          guideStep={guideStep}
+          onSkip={handleGuideSkip}
+          onAdvance={handleGuideAdvance}
+        />
+      )}
     </div>
   );
 }

@@ -22,7 +22,8 @@ const [status, setStatus]   = useState("idle"); // idle | sending | success | er
 
   async function onSubmit(event) {
     event.preventDefault();
-      if (!captchaToken) {
+      
+    if (!captchaToken) {
       setResult("Please complete the captcha.");
       setStatus("error");
       return;
@@ -40,6 +41,7 @@ const [status, setStatus]   = useState("idle"); // idle | sending | success | er
                 method: "POST",
                 body: formData
                 });
+
                  const data = await response.json();
                 
                   if (data.success) {
@@ -59,22 +61,22 @@ const [status, setStatus]   = useState("idle"); // idle | sending | success | er
     }
     catch(err){
 
-setResult("Network error. Please try again.");
-      setStatus("error");
-      captchaRef.current?.resetCaptcha();
-      setCaptchaToken(null);
+        setResult("Network error. Please try again.");
+              setStatus("error");
+              captchaRef.current?.resetCaptcha();
+              setCaptchaToken(null);
 
 
-    }
-   
+            }
+      
 
-    const data = await response.json();
-    if (data.success) {
-      setResult("Form Submitted Successfully");
-      event.target.reset();
-    } else {
-      setResult("Error");
-    }
+  /*     const data = await response.json();
+        if (data.success) {
+          setResult("Form Submitted Successfully");
+          event.target.reset();
+        } else {
+          setResult("Error");
+        } */
   };
 
 

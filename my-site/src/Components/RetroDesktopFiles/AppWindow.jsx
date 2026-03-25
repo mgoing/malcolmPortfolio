@@ -260,7 +260,7 @@ import Draggable from "react-draggable";
 import { APP_INFO } from "./DesktopAppInfo";
 import "./crt.css";
 
-function AppWindow({ app, children, bringToFront, onClose, onMinimize, zIndex }) {
+function AppWindow({ app, children, bringToFront, onClose, onMinimize, zIndex, onGuideAction }) {
   const nodeRef = React.useRef(null);
   const [infoOpen, setInfoOpen] = React.useState(false);
 
@@ -281,6 +281,7 @@ function AppWindow({ app, children, bringToFront, onClose, onMinimize, zIndex })
     >
       <div
         ref={nodeRef}
+        data-guide={`resize-handle-${app.id}`}
         className={`
           absolute rounded shadow-2xl flex flex-col win-animate resize-hint
           ${isActive
@@ -346,13 +347,14 @@ function AppWindow({ app, children, bringToFront, onClose, onMinimize, zIndex })
             {appInfo && (
               <button
                 type="button"
+                data-guide={`btn-info-${app.id}`}
                 className={`no-drag px-1.5 py-0.5 font-mono text-xs rounded transition-all
                   ${infoOpen
                     ? "text-cyan-300 bg-cyan-400/20 border border-cyan-400/40"
                     : "text-white/60 hover:text-cyan-300 border border-transparent hover:border-cyan-400/20"
                   }`}
                 aria-label="Toggle info panel"
-                onClick={(e) => { e.stopPropagation(); setInfoOpen(v => !v); }}
+                onClick={(e) => { e.stopPropagation(); setInfoOpen(v => !v); onGuideAction?.('click', app.id); }}
                 title={infoOpen ? "Close info" : "App info"}
               >
                 {infoOpen ? "[i]" : "[?]"}
@@ -360,13 +362,15 @@ function AppWindow({ app, children, bringToFront, onClose, onMinimize, zIndex })
             )}
 
             <button
-              onClick={(e) => { e.stopPropagation(); onMinimize(); }}
+            data-guide={`btn-minimize-${app.id}`}
+              onClick={(e) => { e.stopPropagation(); onMinimize();  onGuideAction?.('click', app.id); }}
               className="no-drag px-1.5 py-0.5 text-xs font-mono text-white/60 hover:text-white/90 transition-colors"
               type="button"
             >_</button>
 
             <button
-              onClick={(e) => { e.stopPropagation(); onClose(); }}
+            data-guide={`btn-close-${app.id}`}
+              onClick={(e) => { e.stopPropagation(); onClose(); onGuideAction?.('click', app.id); }}
               className="no-drag px-1.5 py-0.5 text-xs font-mono text-white/60 hover:text-red-400 transition-colors"
               type="button"
             >✕</button>
@@ -376,6 +380,7 @@ function AppWindow({ app, children, bringToFront, onClose, onMinimize, zIndex })
         {/* ── Body ──────────────────────────────────────────────────────── */}
         <div className="flex flex-1 min-h-0 relative">
           <div
+          data-guide={`window-body-${app.id}`}
              className="crt-content flex-1 overflow-auto relative"
             
           >

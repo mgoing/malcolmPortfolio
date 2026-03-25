@@ -84,6 +84,7 @@ return (
     >
     <div
     ref={nodeRef}
+    data-guide={`icon-${app.id}`}
     onDoubleClick={() => onDoubleClick(app.id)}
     className="w-20 cursor-grab user-select-none absolute"
     aria-label={app.title}
