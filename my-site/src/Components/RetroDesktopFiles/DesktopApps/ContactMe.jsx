@@ -134,6 +134,7 @@ const [status, setStatus]   = useState("idle"); // idle | sending | success | er
           <div className="contact-captcha">
             <HCaptcha
               sitekey={HCAPTCHA_SITE_KEY}
+              reCaptchaCompat={false}
               onVerify={onCaptchaVerify}
               onExpire={onCaptchaExpire}
               ref={captchaRef}
