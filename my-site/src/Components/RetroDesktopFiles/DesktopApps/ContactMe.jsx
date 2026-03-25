@@ -4,6 +4,81 @@ import './ContactMe.css';
 
 const HCAPTCHA_SITE_KEY = "50b2fe65-b00b-4b9e-ad62-3ba471098be2";
 
+
+export default function ContactMe() {
+  const [result, setResult] = useState("");
+  const [captchaToken, setCaptchaToken] = useState(null);
+  const captchaRef = useRef(null);
+
+  async function onSubmit(event) {
+    event.preventDefault();
+
+    if (!captchaToken) {
+      setResult("Please complete the captcha.");
+      return;
+    }
+
+    const form = event.target;
+
+    const payload = {
+      access_key: ACCESS_KEY,
+      name: form.name.value,
+      email: form.email.value,
+      message: form.message.value,
+      "h-captcha-response": captchaToken,
+    };
+
+    setResult("Sending...");
+
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+      console.log("Web3Forms response:", data);
+
+      if (data.success) {
+        setResult("Message sent! Thank you.");
+        form.reset();
+        captchaRef.current?.resetCaptcha();
+        setCaptchaToken(null);
+      } else {
+        setResult(data.message || "Something went wrong.");
+        captchaRef.current?.resetCaptcha();
+        setCaptchaToken(null);
+      }
+    } catch (err) {
+      console.error(err);
+      setResult("Network error. Please try again.");
+    }
+  }
+
+  return (
+    <div>
+      <form onSubmit={onSubmit}>
+        <input type="text" name="name" placeholder="Name" required /><br />
+        <input type="email" name="email" placeholder="Email" required /><br />
+        <textarea name="message" placeholder="Message" required /><br />
+
+        <HCaptcha
+          sitekey={HCAPTCHA_SITE_KEY}
+          onVerify={(token) => setCaptchaToken(token)}
+          onExpire={() => setCaptchaToken(null)}
+          ref={captchaRef}
+        />
+
+        <button type="submit">Send</button>
+      </form>
+      {result && <p>{result}</p>}
+    </div>
+  );
+}
+
+
+/*
 export default function ContactMe(){
 const [result, setResult] = useState("");
 const [status, setStatus]   = useState("idle"); // idle | sending | success | error
@@ -76,7 +151,7 @@ const [status, setStatus]   = useState("idle"); // idle | sending | success | er
           event.target.reset();
         } else {
           setResult("Error");
-        } */
+        } 
   };
 
 
@@ -130,7 +205,7 @@ const [status, setStatus]   = useState("idle"); // idle | sending | success | er
             />
           </div>
  
-          {/* hCaptcha widget — centred via CSS */}
+          {/* hCaptcha widget — centred via CSS }
           <div className="contact-captcha">
             <HCaptcha
               sitekey={HCAPTCHA_SITE_KEY}
@@ -162,3 +237,4 @@ const [status, setStatus]   = useState("idle"); // idle | sending | success | er
     );
 }
 
+*/
