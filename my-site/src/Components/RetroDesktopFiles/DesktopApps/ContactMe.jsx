@@ -58,22 +58,84 @@ export default function ContactMe() {
   }
 
   return (
-    <div>
-      <form onSubmit={onSubmit}>
-        <input type="text" name="name" placeholder="Name" required /><br />
-        <input type="email" name="email" placeholder="Email" required /><br />
-        <textarea name="message" placeholder="Message" required /><br />
-
-        <HCaptcha
-          sitekey={HCAPTCHA_SITE_KEY}
-          onVerify={(token) => setCaptchaToken(token)}
-          onExpire={() => setCaptchaToken(null)}
-          ref={captchaRef}
-        />
-
-        <button type="submit">Send</button>
-      </form>
-      {result && <p>{result}</p>}
+    
+  <div className="contact-wrap">
+      <div className="contact-card">
+ 
+        <div className="contact-header">
+          <span className="contact-header__icon">✉</span>
+          <h2 className="contact-header__title">Get In Touch</h2>
+          <p className="contact-header__sub">
+            Fill out the form and I'll respond as soon as possible.
+          </p>
+        </div>
+ 
+        <form className="contact-form" onSubmit={onSubmit} noValidate>
+ 
+          <div className="contact-field">
+            <label className="contact-label" htmlFor="cf-name">Name</label>
+            <input
+              id="cf-name"
+              className="contact-input"
+              type="text"
+              name="name"
+              placeholder="Your name"
+              required
+            />
+          </div>
+ 
+          <div className="contact-field">
+            <label className="contact-label" htmlFor="cf-email">Email</label>
+            <input
+              id="cf-email"
+              className="contact-input"
+              type="email"
+              name="email"
+              placeholder="your@email.com"
+              required
+            />
+          </div>
+ 
+          <div className="contact-field">
+            <label className="contact-label" htmlFor="cf-message">Message</label>
+            <textarea
+              id="cf-message"
+              className="contact-input contact-textarea"
+              name="message"
+              placeholder="What's on your mind?"
+              rows={5}
+              required
+            />
+          </div>
+ 
+          {/* hCaptcha widget — centred via CSS */ }
+          <div className="contact-captcha">
+            <HCaptcha
+              sitekey={HCAPTCHA_SITE_KEY}
+              reCaptchaCompat={false}
+              onVerify={onCaptchaVerify}
+              onExpire={onCaptchaExpire}
+              ref={captchaRef}
+              theme="dark"
+            />
+          </div>
+ 
+          <button
+            type="submit"
+            className={`contact-submit ${status === 'sending' ? 'contact-submit--loading' : ''}`}
+            disabled={status === 'sending'}
+          >
+            {status === 'sending' ? 'Sending...' : 'Send Message'}
+          </button>
+ 
+          {result && (
+            <p className={`contact-result contact-result--${status}`}>
+              {status === 'success' && '✓ '}{result}
+            </p>
+          )}
+ 
+        </form>
+      </div>
     </div>
   );
 }
