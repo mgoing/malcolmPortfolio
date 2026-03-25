@@ -9,15 +9,34 @@ const ACCESS_KEY = "a53d95f5-b332-44a7-a9a7-37d48961024c";
 export default function ContactMe() {
   const [result, setResult] = useState("");
   const [captchaToken, setCaptchaToken] = useState(null);
+  const [status, setStatus]   = useState("idle"); // idle | sending | success | error
+ const captchaTokenRef = useRef(null);  
   const captchaRef = useRef(null);
+
+
+function onCaptchaVerify(token) {
+    setCaptchaToken(token);
+    captchaTokenRef.current = token;
+  }
+ 
+  function onCaptchaExpire() {
+    setCaptchaToken(null);
+    captchaTokenRef.current = null;
+  }
 
   async function onSubmit(event) {
     event.preventDefault();
 
+    const token = captchaTokenRef.current;
+
     if (!captchaToken) {
       setResult("Please complete the captcha.");
+      setStatus("error");
       return;
     }
+
+    setResult("Sending....");
+    setStatus("sending");
 
     const form = event.target;
 
@@ -26,10 +45,10 @@ export default function ContactMe() {
       name: form.name.value,
       email: form.email.value,
       message: form.message.value,
-      "h-captcha-response": captchaToken,
+      "h-captcha-response": token,
     };
 
-    setResult("Sending...");
+    
 
     try {
       const res = await fetch("https://api.web3forms.com/submit", {
@@ -39,21 +58,29 @@ export default function ContactMe() {
       });
 
       const data = await res.json();
-      console.log("Web3Forms response:", data);
+      //console.log("Web3Forms response:", data);
 
       if (data.success) {
         setResult("Message sent! Thank you.");
+        setStatus("success");
         form.reset();
         captchaRef.current?.resetCaptcha();
         setCaptchaToken(null);
+        captchaTokenRef.current = null;
       } else {
         setResult(data.message || "Something went wrong.");
+        setStatus('error');
         captchaRef.current?.resetCaptcha();
         setCaptchaToken(null);
+        captchaTokenRef.current = null;
       }
     } catch (err) {
-      console.error(err);
+     // console.error(err);
       setResult("Network error. Please try again.");
+      setStatus("error");
+      captchaRef.current?.resetCaptcha();
+      setCaptchaToken(null);
+      captchaTokenRef.current = null;
     }
   }
 
