@@ -9,6 +9,7 @@ import TerminalIntro from './Components/TerminalIntro';
 import './Components/TerminalIntro.css';
 
 const INTRO_KEY = 'hasSeenIntro';
+const SITE_GUIDE = 'seenSiteGuide';
 
 export default function App() {
   const [showDesktop, setShowDesktop] = useState(() => {
@@ -29,6 +30,7 @@ export default function App() {
   // called by NavWindow when correct password is entered
   const handleAuthSuccess = useCallback(() => {
     localStorage.setItem(INTRO_KEY, 'true');
+    localStorage.setItem(SITE_GUIDE, 'false');
     setShowDesktop(true);
     
     // optional: clear any intro flags, start desktop music etc.
@@ -66,7 +68,7 @@ export default function App() {
   return(
 <>
       {showDesktop ? (
-        <RetroDesktop />
+        <RetroDesktop siteGuide={localStorage.getItem(SITE_GUIDE) ?? 'false'}  />
       ) : (
         <TerminalIntro onSuccess={handleAuthSuccess} />
       )}
